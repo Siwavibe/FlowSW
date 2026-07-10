@@ -1,0 +1,4 @@
+.gemini/
+*.log
+scratch/
+node_modules/

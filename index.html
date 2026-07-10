@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WorkFlow Dashboard - API Communications</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="brand-icon">SW</div>
+          <span class="brand-title">WorkFlow</span>
+        </div>
+        <div class="search-box">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+          <input type="text" id="search-input" placeholder="ค้นหา API, ตาราง, หน้าจอ, ขั้นตอน...">
+        </div>
+      </div>
+      
+      <!-- Project Switcher Tabs -->
+      <div class="project-tabs">
+        <button class="tab-btn active" id="tab-sand" data-project="sand">
+          <span>1. ดูดทราย</span>
+          <span class="count" id="count-sand">5 คำขอ</span>
+        </button>
+        <button class="tab-btn" id="tab-land" data-project="land">
+          <span>2. จัดสรรที่ดิน</span>
+          <span class="count" id="count-land">8 คำขอ</span>
+        </button>
+      </div>
+      
+      <!-- Requests List -->
+      <div class="request-list-container" id="request-list">
+        <!-- Will be dynamically populated by JS -->
+      </div>
+    </aside>
+    
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Main Header -->
+      <header class="main-header">
+        <div class="header-left" style="display: flex; align-items: center; gap: 16px;">
+          <button class="btn-toggle-sidebar" id="btn-toggle-sidebar" title="ซ่อน/แสดง เมนูด้านซ้าย" style="background: none; border: none; color: var(--text-secondary); cursor: pointer; padding: 8px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: all var(--transition-speed);">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 22px; height: 22px;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+          <div>
+            <h1 class="workflow-title" id="active-title">กำลังโหลดข้อมูล...</h1>
+            <p class="workflow-desc" id="active-desc">รายละเอียดคำขอระบบอนุญาตและกระบวนการทำงาน</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <!-- Reset button to deselect active step and show overview -->
+          <button class="btn-control" id="btn-reset-view">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 16px; height: 16px;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+            </svg>
+            ภาพรวม Flow
+          </button>
+          
+          <!-- Toggle details button -->
+          <button class="btn-control" id="btn-toggle-details" title="ซ่อน/แสดง รายละเอียดด้านขวา">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 16px; height: 16px;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 4.5v15m6-15v15m-12-3h18c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v12.75c0 .621.504 1.125 1.125 1.125z" />
+            </svg>
+            รายละเอียด
+          </button>
+          
+          <!-- Theme Toggle Button -->
+          <button class="theme-toggle" id="theme-toggle-btn" title="เปลี่ยนธีม มืด/สว่าง">
+            <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px;">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+            </svg>
+          </button>
+        </div>
+      </header>
+      
+      <!-- Workspace Panels -->
+      <div class="workspace-panels">
+        
+        <!-- Interactive Diagram Panel -->
+        <div class="diagram-wrapper">
+          <div class="diagram-container" id="diagram-container">
+            <!-- Will contain dynamically generated SVG -->
+          </div>
+        </div>
+        
+        <!-- Detail Side Panel -->
+        <aside class="detail-pane">
+          
+          <!-- Active Step Details Section -->
+          <div class="pane-section" id="section-step-details">
+            <h2 class="pane-title">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 16px; height: 16px; color: var(--accent-color);">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 111.085 1.085l-.04.04m-2.122 0A2.25 2.25 0 119.75 9m5.25 6H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.25 2.25 0 002.25 6v10.5A2.25 2.25 0 004.5 19h10.5a2.25 2.25 0 002.25-2.25V16.5" />
+              </svg>
+              รายละเอียดขั้นตอน
+            </h2>
+            <div id="step-detail-content">
+              <div class="empty-state">
+                <svg class="empty-state-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 9.152c.582.448 1.148.89 1.676 1.345m-7.708-.344a3.75 3.75 0 11-5.304-5.304 3.75 3.75 0 015.304 5.304zm0 0l-1.047 1.047a2.25 2.25 0 00-.659 1.591v4.83a2.25 2.25 0 002.25 2.25h1.5m10.5-11.25h.008v.008h-.008V8.25zm.008 2.25h-.008v.008h.008V10.5zm0 2.25h-.008v.008h.008v-.008zm0 2.25h-.008v.008h.008V15zm-2.25-6h-.008v.008h.008V9zm0 2.25h-.008v.008h.008V11.25zm0 2.25h-.008v.008h.008V13.5zm0 2.25h-.008v.008h.008v-.008zm-2.25-4.5h-.008v.008h.008V11.25zm0 2.25h-.008v.008h.008V13.5z" />
+                </svg>
+                <div class="empty-state-title">กรุณาเลือกขั้นตอน (API Arrow) ในแผนภาพ หรือกดดูภาพรวม</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Meeting Notes Section -->
+          <div class="pane-section" id="section-meeting-notes" style="display: none;">
+            <h2 class="pane-title">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 16px; height: 16px; color: var(--accent-color);">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18V6.125C3 5.504 3.504 5 4.125 5H7.5m3-1.5h3m-3 0a1.5 1.5 0 00-3 3h7.5a1.5 1.5 0 00-3-3z" />
+              </svg>
+              บันทึกการประชุม / ข้อตกลงทีม
+            </h2>
+            <div class="meeting-notes-content" id="meeting-notes-text">
+              ยังไม่มีข้อมูลบันทึกในคำขอนี้
+            </div>
+          </div>
+          
+        </aside>
+        
+      </div>
+      
+    </main>
+    
+  </div>
+  
+  <!-- Load Workflow Data first, then main application controller -->
+  <script src="workflows.js?v=24"></script>
+  <script src="app.js?v=24"></script>
+</body>
+</html>
