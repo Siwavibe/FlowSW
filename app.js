@@ -284,6 +284,18 @@ document.addEventListener("DOMContentLoaded", () => {
     return "POST";
   }
 
+  // --- Auto-expand Details Panel Helper ---
+  function expandDetailsPanel() {
+    const detailPaneEl = document.querySelector(".detail-pane");
+    const btnToggleDetails = document.getElementById("btn-toggle-details");
+    if (detailPaneEl && detailPaneEl.classList.contains("collapsed")) {
+      detailPaneEl.classList.remove("collapsed");
+    }
+    if (btnToggleDetails && !btnToggleDetails.classList.contains("active")) {
+      btnToggleDetails.classList.add("active");
+    }
+  }
+
   // --- Dynamic SVG Sequence Diagram Generator ---
   function renderDiagram() {
     const request = WORKFLOWS_DATA[currentProject].requests[currentRequestIndex];
@@ -529,6 +541,7 @@ document.addEventListener("DOMContentLoaded", () => {
       group.addEventListener("click", () => {
         const stepIdx = parseInt(group.getAttribute("data-step-index"));
         currentStepIndex = stepIdx;
+        expandDetailsPanel();
         renderDiagram();
         renderDetails();
       });
@@ -570,6 +583,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       window.selectStep = (idx) => {
         currentStepIndex = idx;
+        expandDetailsPanel();
         renderDiagram();
         renderDetails();
       };
