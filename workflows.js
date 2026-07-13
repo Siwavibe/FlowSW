@@ -829,10 +829,137 @@ const WORKFLOWS_DATA = {
       {
         id: "land-req-1",
         title: "1. คำขออนุญาตทำการจัดสรรที่ดิน",
-        description: "ขั้นตอนการยื่นคำขอเพื่อรับใบอนุญาตทำการจัดสรรที่ดิน",
-        systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
+        description: "ขั้นตอนการยื่นคำขอเพื่อรับใบอนุญาตทำการจัดสรรที่ดิ ระหว่าง ELicense กับ DOL2",
+        systems: ["User", "ELS","PiPr", "minio", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
         meetingNotes: "",
-        steps: []
+        steps: [{
+            from: "User",
+            to: "ELS",
+            label: "1. กรอกข้อมูลค้นหาเอกสารสิทธิ",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "PiPr",
+            label: "2. ค้นหา โฉนด + ผู้ถือกรรมสิทธิ",
+            api: "PiPr : https://{{baseUrl}}/api/v1/RealTime/ParcelOwnerByParcelNumber?ProvinceCode=13&AmphoeCode=01&ParcelNumber=75943",
+            params: "",
+            db: "",
+            notes: "api sercvice ของ Pipr https://pipr.dol.go.th/dem02_2?variable=12"
+          },
+          {
+            from: "ELS",
+            to: "PiPr",
+            label: "3. ค้นหา น.ส3 + ผู้ถือกรรมสิทธิ",
+            api: "PiPr : https://{{baseUrl}}/api/v1/RealTime/NS3AOwnerByNS3ANumber?ProvinceCode=66&AmphoeCode=04&TambonCode=01&ParcelNS3Number=432",
+            params: "",
+            db: "",
+            notes: "api sercvice ของ Pipr https://pipr.dol.go.th/dem02_2?variable=13"
+          },          
+          {
+            from: "User",
+            to: "ELS",
+            label: "4. กดปุ่ม ส่งคำขอคำขอไปตรวจสอบ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ผู้ขอกดปุ่มส่งคำขอผ่านระบบ จากแท๊บ แนบเอกสารหลักฐาน "
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "5. ส่งคำขอ",
+            api: "REG : /elss/api/v1/public/sec9/processData",
+            params: "",
+            db: "",
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=267"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "6. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "7. เมนู นัดล่วงหน้า > Popup เอกสารหลักฐาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ดำเนินการคำขอที่ส่งมายัง DOL2 เพื่อตรวจเอกสาร"
+          },
+          {
+            from: "REG",
+            to: "minio",
+            label: "8. กดดูไฟล์",
+            api: "minio : /elss/minio-file-service/api/v1/ext/file/view/xxxxx.pdf",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสารเพื่อเปิดดูไฟล์ที่ eLicense"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "9. ตรวจเอกสาร ผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "ตรวจเอกสาร หลักฐาน"
+          },
+          {
+            from: "REG",
+            to: "ELS",
+            label: "10. บันทึกผล ตรวจผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสาร ส่งผลตรวจเอกสารหลักฐานไปยัง eLicense และ ELS ส่ง mail ต่อ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "11. กรณี ไม่ผ่าน แนบไฟล์รอบที่ n",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แนบไฟล์และส่งใหม่อีกครั้ง"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "12. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2 ส่ง checkEvdSts=3 ทุกครั้ง, checkCount และ evdCount=ตามรอบ"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "13. กรณี ตรวจผ่าน ไป ชำระเงิน",
+            api: "กรมบัญชีกลาง : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "14. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          }
+          
+        ]
           
         
       },
