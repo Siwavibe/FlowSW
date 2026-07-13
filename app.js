@@ -286,7 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     const label = step.label || "";
-    if (label.includes("กดดูไฟล์") || (label.includes("ตรวจผ่าน") && label.includes("ชำระเงิน")) || label.includes("เช็คสถานะ") || label.includes("แบบพิมพ์") || label.includes("ค้นหา")) {
+    if (label.includes("กดดูไฟล์") || (label.includes("ตรวจผ่าน") && label.includes("ชำระเงิน")) || label.includes("เช็คสถานะ") || label.includes("แบบพิมพ์") || label.includes("ค้นหา") || label.includes("ไป ชำระเงิน") || label.includes("พิมพ์ใบแจ้งชำระเงิน")) {
       return "GET";
     }
     

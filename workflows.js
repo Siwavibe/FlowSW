@@ -144,7 +144,8 @@ const WORKFLOWS_DATA = {
             params: "",
             db: "",
             notes: "เมนูอนุมัติรับคำขอ ส่งเรื่องไปให้ EXP "
-          },{
+          },
+          {
             from: "schedule",
             to: "REG",
             label: "16. เช็คสถานะ ",
@@ -156,7 +157,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "EXP",
-            label: "17.ดำเนินการตามขั้นตอน EXP เจ้าหน้าที่กรอกข้อมูล",
+            label: "17. ดำเนินการตามขั้นตอน EXP เจ้าหน้าที่กรอกข้อมูล",
             api: "",
             params: "",
             db: "",
@@ -336,16 +337,16 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "EXP",
-            label: "16.ดำเนินการตามขั้นตอน EXP กรอกข้อมูลใบอนุญาตและแสกนใยอนุญาต",
+            label: "16. ดำเนินการตามขั้นตอน EXP กรอกข้อมูลใบอนุญาตและแสกนใยอนุญาต",
             api: "",
             params: "",
             db: "",
             notes: "เมนู ทะเบียนใบอนุญาตมาตรา 9(2) หน้า EXPSREG004"
           },
-           {
+          {
             from: "EXP",
             to: "ELS",
-            label: "17.ส่งข้อมูลใบอนุญาตและภาพแสกน",
+            label: "17. ส่งข้อมูลใบอนุญาตและภาพแสกน",
             api: "",
             params: "",
             db: "",
@@ -354,7 +355,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "ELV",
-            label: "18.insert ELV ให้",
+            label: "18. insert ELV ให้",
             api: "",
             params: "",
             db: "",
@@ -363,7 +364,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "minio",
-            label: "19.ภาพแสกน และ Gen PDF ใส่ Timestamp + CA",
+            label: "19. ภาพแสกน และ Gen PDF ใส่ Timestamp + CA",
             api: "",
             params: "",
             db: "",
@@ -372,7 +373,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "ELV",
-            label: "20.",
+            label: "20. ",
             api: "",
             params: "",
             db: "",
@@ -521,7 +522,8 @@ const WORKFLOWS_DATA = {
             params: "",
             db: "",
             notes: "เมนูอนุมัติรับคำขอ ส่งเรื่องไปให้ EXP "
-          },{
+          },
+          {
             from: "schedule",
             to: "REG",
             label: "16. เช็คสถานะ ",
@@ -533,7 +535,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "EXP",
-            label: "17.ดำเนินการตามขั้นตอน EXP เจ้าหน้าที่กรอกข้อมูล",
+            label: "17. ดำเนินการตามขั้นตอน EXP เจ้าหน้าที่กรอกข้อมูล",
             api: "",
             params: "",
             db: "",
@@ -677,7 +679,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "ELV",
-            label: "12.(flow เดิม) เอาใบอนุญาตเดิม มาใส่คำว่าใบแทน",
+            label: "12. (flow เดิม) เอาใบอนุญาตเดิม มาใส่คำว่าใบแทน",
             api: "",
             params: "",
             db: "",
@@ -737,7 +739,7 @@ const WORKFLOWS_DATA = {
         systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN","EXP"],
         meetingNotes: "",
         steps: [
-           {
+          {
             from: "User",
             to: "ELS",
             label: "1. กดปุ่ม ส่งคำขอคำขอไปตรวจสอบ",
@@ -745,7 +747,7 @@ const WORKFLOWS_DATA = {
             params: "",
             db: "",
             notes: "ผู้ขอกดปุ่มส่งคำขอผ่านระบบ จากแท๊บ แนบเอกสารหลักฐาน "
-          },                  
+          },
           {
             from: "User",
             to: "schedule",
@@ -763,7 +765,7 @@ const WORKFLOWS_DATA = {
             params: "",
             db: "",
             notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
-          },          
+          },
           {
             from: "ELS",
             to: "ELV",
@@ -812,7 +814,7 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "17. เช็คสถานะ ",
+            label: "9. เช็คสถานะ ",
             api: "REG : /elss/api/v1/public/sec9/getProcessStatus/",
             params: "",
             db: "",
@@ -832,7 +834,8 @@ const WORKFLOWS_DATA = {
         description: "ขั้นตอนการยื่นคำขอเพื่อรับใบอนุญาตทำการจัดสรรที่ดิ ระหว่าง ELicense กับ DOL2",
         systems: ["User", "ELS","PiPr", "minio", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
         meetingNotes: "",
-        steps: [{
+        steps: [
+          {
             from: "User",
             to: "ELS",
             label: "1. กรอกข้อมูลค้นหาเอกสารสิทธิ",
@@ -858,7 +861,7 @@ const WORKFLOWS_DATA = {
             params: "",
             db: "",
             notes: "api sercvice ของ Pipr https://pipr.dol.go.th/dem02_2?variable=13"
-          },          
+          },
           {
             from: "User",
             to: "ELS",
@@ -958,7 +961,6 @@ const WORKFLOWS_DATA = {
             db: "",
             notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
           }
-          
         ]
           
         
@@ -969,7 +971,8 @@ const WORKFLOWS_DATA = {
         description: "การขอปรับปรุงแผนผังการจัดสรรที่ดิน หรือเปลี่ยนแปลงวิธีการจัดสรรที่เคยได้รับอนุญาตไว้เดิม",
         systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
-        steps: [       
+        steps: [
+
         ]
       },
       {
@@ -978,8 +981,8 @@ const WORKFLOWS_DATA = {
         description: "การขอโอนใบอนุญาตจัดสรรที่ดินจากผู้จัดสรรที่ดินรายเดิม ไปยังผู้ประกอบการรายใหม่",
          systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
-        steps: [       
-        
+        steps: [
+
         ]
       },
       {
@@ -988,7 +991,8 @@ const WORKFLOWS_DATA = {
         description: "ทายาทหรือผู้จัดการมรดกยื่นคำขอรับโอนใบอนุญาตจัดสรรที่ดินเนื่องจากผู้ได้รับใบอนุญาตเดิมเสียชีวิต",
          systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
-        steps: [       
+        steps: [
+
         ]
       },
       {
@@ -997,7 +1001,8 @@ const WORKFLOWS_DATA = {
         description: "การขอใบแทนใบอนุญาตทำการจัดสรรที่ดิน (อ.ส.ป. 1) กรณีเอกสารสูญหาย ชำรุด หรือเลอะเลือน",
          systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
-        steps: [       
+        steps: [
+
         ]
       },
       {
@@ -1006,7 +1011,8 @@ const WORKFLOWS_DATA = {
         description: "ผู้จัดสรรยื่นคำขอยกเลิกการทำการจัดสรรที่ดินทั้งหมดหรือบางส่วนที่ยังไม่ได้ทำการจำหน่ายให้แก่ผู้ซื้อ",
          systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
-        steps: [       
+        steps: [
+
         ]
       },
       {
@@ -1015,7 +1021,8 @@ const WORKFLOWS_DATA = {
         description: "ผู้จัดสรรยื่นคำขอรับอนุญาตก่อภาระผูกพัน (เช่น จดจำนอง หรือก่อสิทธิ์ภาระจำยอม) ในที่ดินโครงการจัดสรร",
         systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
-        steps: [       
+        steps: [
+
         ]
       },
       {
@@ -1024,7 +1031,8 @@ const WORKFLOWS_DATA = {
         description: "ผู้ซื้อแปลงย่อยหรือผู้จัดสรรร่วมมือกันยื่นจดทะเบียนจัดตั้งนิติบุคคลหมู่บ้านจัดสรร เพื่อรับมอบสิทธิ์ระบบสาธารณูปโภคเข้ามาบริหาร",
          systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
-        steps: [       
+        steps: [
+
         ]
       }
     ]
