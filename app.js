@@ -82,6 +82,14 @@ document.addEventListener("DOMContentLoaded", () => {
     setupTheme();
     renderRequestList();
     loadRequest(0);
+
+    // Collapse sidebar by default on mobile screens on initial load
+    if (window.innerWidth <= 768) {
+      const sidebarEl = document.querySelector(".sidebar");
+      const btnToggleSidebar = document.getElementById("btn-toggle-sidebar");
+      if (sidebarEl) sidebarEl.classList.add("collapsed");
+      if (btnToggleSidebar) btnToggleSidebar.classList.remove("active");
+    }
   }
 
   // --- Event Listeners ---
@@ -113,6 +121,15 @@ document.addEventListener("DOMContentLoaded", () => {
       sidebarEl.classList.toggle("collapsed");
       btnToggleSidebar.classList.toggle("active");
     });
+
+    // Sidebar overlay click (to close sidebar on mobile)
+    const sidebarOverlay = document.getElementById("sidebar-overlay");
+    if (sidebarOverlay) {
+      sidebarOverlay.addEventListener("click", () => {
+        if (sidebarEl) sidebarEl.classList.add("collapsed");
+        if (btnToggleSidebar) btnToggleSidebar.classList.remove("active");
+      });
+    }
 
     // Details panel toggle
     const btnToggleDetails = document.getElementById("btn-toggle-details");
