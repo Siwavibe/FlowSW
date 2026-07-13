@@ -94,8 +94,17 @@ const WORKFLOWS_DATA = {
           {
             from: "User",
             to: "schedule",
-            label: "10. กรณี ตรวจผ่าน ไป ชำระเงิน",
-            api: "กรมบัญชีกลาง : /elss/api/v1/public/evd/sendEvd",
+            label: "10. กรณี ตรวจผ่าน กด พิมพ์ใบแจ้งชำระเงิน",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "11. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
             params: "",
             db: "",
             notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
@@ -103,7 +112,7 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "11. สถานะ ชำระเงิน",
+            label: "12. สถานะ ชำระเงิน",
             api: "REG : /elss/api/v1/public/order/saveOrder",
             params: "",
             db: "",
@@ -112,7 +121,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "REG",
-            label: "12. รับเรื่องและเรียกคิว",
+            label: "13. รับเรื่องและเรียกคิว",
             api: "",
             params: "",
             db: "",
@@ -121,7 +130,7 @@ const WORKFLOWS_DATA = {
           {
             from: "REG",
             to: "ELS",
-            label: "13. แบบพิมพ์",
+            label: "14. แบบพิมพ์",
             api: "ESL : /elss/els/sand/api/v1/ext/xxxxxxxxxxx",
             params: "",
             db: "",
@@ -130,7 +139,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "FIN",
-            label: "14. ชำระเงิน ใบสั่ง E000X",
+            label: "15. ชำระเงิน ใบสั่ง E000X",
             api: "",
             params: "",
             db: "",
@@ -139,7 +148,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "REG",
-            label: "15. อนุมัติรับคำขอ",
+            label: "16. อนุมัติรับคำขอ",
             api: "",
             params: "",
             db: "",
@@ -148,7 +157,7 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "16. เช็คสถานะ ",
+            label: "17. เช็คสถานะ ",
             api: "REG : /elss/api/v1/public/sec9/getProcessStatus/",
             params: "",
             db: "",
@@ -157,7 +166,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "EXP",
-            label: "17. ดำเนินการตามขั้นตอน EXP เจ้าหน้าที่กรอกข้อมูล",
+            label: "18. ดำเนินการตามขั้นตอน EXP เจ้าหน้าที่กรอกข้อมูล",
             api: "",
             params: "",
             db: "",
@@ -166,7 +175,7 @@ const WORKFLOWS_DATA = {
           {
             from: "EXP",
             to: "ELS",
-            label: "18. อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
+            label: "19. อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
             api: "ELS : ext/requests/workflow/committee/approve",
             params: "",
             db: "",
@@ -175,7 +184,7 @@ const WORKFLOWS_DATA = {
           {
             from: "EXP",
             to: "ELS",
-            label: "19. ไม่อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
+            label: "20. ไม่อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
             api: "ELS : /ext/requests/workflow/committee/reject",
             params: "",
             db: "",
@@ -184,7 +193,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "ELV",
-            label: "20. (อาจจะไม่มี) รอออกใบอนุญาต",
+            label: "21. (อาจจะไม่มี) รอออกใบอนุญาต",
             api: "ELS : /ext/requests/workflow/license/pending",
             params: "",
             db: "",
@@ -283,8 +292,17 @@ const WORKFLOWS_DATA = {
           {
             from: "User",
             to: "schedule",
-            label: "10. กรณี ตรวจผ่าน ไป ชำระเงิน",
-            api: "กรมบัญชีกลาง : /elss/api/v1/public/evd/sendEvd",
+            label: "10. กรณี ตรวจผ่าน กด พิมพ์ใบแจ้งชำระเงิน",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "11. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
             params: "",
             db: "",
             notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
@@ -292,7 +310,7 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "11. สถานะ ชำระเงิน",
+            label: "12. สถานะ ชำระเงิน",
             api: "REG : /elss/api/v1/public/order/saveOrder",
             params: "",
             db: "",
@@ -301,7 +319,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "REG",
-            label: "12. รับเรื่องและเรียกคิว",
+            label: "13. รับเรื่องและเรียกคิว",
             api: "",
             params: "",
             db: "",
@@ -310,7 +328,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "FIN",
-            label: "13. ชำระเงิน ใบสั่ง E000X",
+            label: "14. ชำระเงิน ใบสั่ง E000X",
             api: "",
             params: "",
             db: "",
@@ -319,7 +337,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "REG",
-            label: "14. จดทะเบียน",
+            label: "15. จดทะเบียน",
             api: "",
             params: "",
             db: "",
@@ -328,7 +346,7 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "15. เช็คสถานะ ",
+            label: "16. เช็คสถานะ ",
             api: "REG : /elss/api/v1/public/sec9/getProcessStatus/",
             params: "",
             db: "",
@@ -337,7 +355,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "EXP",
-            label: "16. ดำเนินการตามขั้นตอน EXP กรอกข้อมูลใบอนุญาตและแสกนใยอนุญาต",
+            label: "17. ดำเนินการตามขั้นตอน EXP กรอกข้อมูลใบอนุญาตและแสกนใยอนุญาต",
             api: "",
             params: "",
             db: "",
@@ -346,7 +364,7 @@ const WORKFLOWS_DATA = {
           {
             from: "EXP",
             to: "ELS",
-            label: "17. ส่งข้อมูลใบอนุญาตและภาพแสกน",
+            label: "18. ส่งข้อมูลใบอนุญาตและภาพแสกน",
             api: "",
             params: "",
             db: "",
@@ -355,7 +373,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "ELV",
-            label: "18. insert ELV ให้",
+            label: "19. insert ELV ให้",
             api: "",
             params: "",
             db: "",
@@ -364,7 +382,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "minio",
-            label: "19. ภาพแสกน และ Gen PDF ใส่ Timestamp + CA",
+            label: "20. ภาพแสกน และ Gen PDF ใส่ Timestamp + CA",
             api: "",
             params: "",
             db: "",
@@ -373,7 +391,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "ELV",
-            label: "20. ",
+            label: "21. ",
             api: "",
             params: "",
             db: "",
@@ -472,8 +490,17 @@ const WORKFLOWS_DATA = {
           {
             from: "User",
             to: "schedule",
-            label: "10. กรณี ตรวจผ่าน ไป ชำระเงิน",
-            api: "กรมบัญชีกลาง : /elss/api/v1/public/evd/sendEvd",
+            label: "10. กรณี ตรวจผ่าน กด พิมพ์ใบแจ้งชำระเงิน",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "11. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
             params: "",
             db: "",
             notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
@@ -481,7 +508,7 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "11. สถานะ ชำระเงิน",
+            label: "12. สถานะ ชำระเงิน",
             api: "REG : /elss/api/v1/public/order/saveOrder",
             params: "",
             db: "",
@@ -490,7 +517,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "REG",
-            label: "12. รับเรื่องและเรียกคิว",
+            label: "13. รับเรื่องและเรียกคิว",
             api: "",
             params: "",
             db: "",
@@ -499,7 +526,7 @@ const WORKFLOWS_DATA = {
           {
             from: "REG",
             to: "ELS",
-            label: "13. แบบพิมพ์",
+            label: "14. แบบพิมพ์",
             api: "ESL : /elss/els/sand/api/v1/ext/xxxxxxxxxxx",
             params: "",
             db: "",
@@ -508,7 +535,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "FIN",
-            label: "14. ชำระเงิน ใบสั่ง E000X",
+            label: "15. ชำระเงิน ใบสั่ง E000X",
             api: "",
             params: "",
             db: "",
@@ -517,7 +544,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "REG",
-            label: "15. อนุมัติรับคำขอ",
+            label: "16. อนุมัติรับคำขอ",
             api: "",
             params: "",
             db: "",
@@ -526,7 +553,7 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "16. เช็คสถานะ ",
+            label: "17. เช็คสถานะ ",
             api: "REG : /elss/api/v1/public/sec9/getProcessStatus/",
             params: "",
             db: "",
@@ -535,7 +562,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "EXP",
-            label: "17. ดำเนินการตามขั้นตอน EXP เจ้าหน้าที่กรอกข้อมูล",
+            label: "18. ดำเนินการตามขั้นตอน EXP เจ้าหน้าที่กรอกข้อมูล",
             api: "",
             params: "",
             db: "",
@@ -544,7 +571,7 @@ const WORKFLOWS_DATA = {
           {
             from: "EXP",
             to: "ELS",
-            label: "18. อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
+            label: "19. อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
             api: "ELS : ext/requests/workflow/committee/approve",
             params: "",
             db: "",
@@ -553,7 +580,7 @@ const WORKFLOWS_DATA = {
           {
             from: "EXP",
             to: "ELS",
-            label: "19. ไม่อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
+            label: "20. ไม่อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
             api: "ELS : /ext/requests/workflow/committee/reject",
             params: "",
             db: "",
@@ -562,7 +589,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "ELV",
-            label: "20. (อาจจะไม่มี) รอออกใบอนุญาต",
+            label: "21. (อาจจะไม่มี) รอออกใบอนุญาต",
             api: "ELS : /ext/requests/workflow/license/pending",
             params: "",
             db: "",
@@ -661,8 +688,17 @@ const WORKFLOWS_DATA = {
           {
             from: "User",
             to: "schedule",
-            label: "10. กรณี ตรวจผ่าน ไป ชำระเงิน",
-            api: "กรมบัญชีกลาง : /elss/api/v1/public/evd/sendEvd",
+            label: "10. กรณี ตรวจผ่าน กด พิมพ์ใบแจ้งชำระเงิน",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "11. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
             params: "",
             db: "",
             notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
@@ -670,7 +706,7 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "11. สถานะ ชำระเงิน",
+            label: "12. สถานะ ชำระเงิน",
             api: "REG : /elss/api/v1/public/order/saveOrder",
             params: "",
             db: "",
@@ -679,7 +715,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "ELV",
-            label: "12. (flow เดิม) เอาใบอนุญาตเดิม มาใส่คำว่าใบแทน",
+            label: "13. (flow เดิม) เอาใบอนุญาตเดิม มาใส่คำว่าใบแทน",
             api: "",
             params: "",
             db: "",
@@ -688,7 +724,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "REG",
-            label: "13. รับเรื่องและเรียกคิว",
+            label: "14. รับเรื่องและเรียกคิว",
             api: "",
             params: "",
             db: "",
@@ -697,7 +733,7 @@ const WORKFLOWS_DATA = {
           {
             from: "REG",
             to: "ELS",
-            label: "14. แบบพิมพ์",
+            label: "15. แบบพิมพ์",
             api: "ESL : /elss/els/sand/api/v1/ext/xxxxxxxxxxx",
             params: "",
             db: "",
@@ -706,7 +742,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "FIN",
-            label: "15. ชำระเงิน ใบสั่ง E000X",
+            label: "16. ชำระเงิน ใบสั่ง E000X",
             api: "",
             params: "",
             db: "",
@@ -715,7 +751,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "REG",
-            label: "16. อนุมัติรับคำขอ",
+            label: "17. อนุมัติรับคำขอ",
             api: "",
             params: "",
             db: "",
@@ -724,7 +760,7 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "17. เช็คสถานะ ",
+            label: "18. เช็คสถานะ ",
             api: "REG : /elss/api/v1/public/sec9/getProcessStatus/",
             params: "",
             db: "",
@@ -751,8 +787,17 @@ const WORKFLOWS_DATA = {
           {
             from: "User",
             to: "schedule",
-            label: "2. ไป ชำระเงิน",
-            api: "กรมบัญชีกลาง : /elss/api/v1/public/evd/sendEvd",
+            label: "2. กรณี ตรวจผ่าน กด พิมพ์ใบแจ้งชำระเงิน",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "3. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
             params: "",
             db: "",
             notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
@@ -760,7 +805,7 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "3. สถานะ ชำระเงิน",
+            label: "4. สถานะ ชำระเงิน",
             api: "REG : /elss/api/v1/public/order/saveOrder",
             params: "",
             db: "",
@@ -769,7 +814,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "ELV",
-            label: "4. คาดใบอนุญาตสีแดง ว่ายกเลิก",
+            label: "5. คาดใบอนุญาตสีแดง ว่ายกเลิก",
             api: "ELV : elss/pdf/api/v1/license/sand/cancel-uploaded",
             params: "",
             db: "",
@@ -778,7 +823,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "REG",
-            label: "5. รับเรื่องและเรียกคิว",
+            label: "6. รับเรื่องและเรียกคิว",
             api: "",
             params: "",
             db: "",
@@ -787,7 +832,7 @@ const WORKFLOWS_DATA = {
           {
             from: "REG",
             to: "ELS",
-            label: "6. แบบพิมพ์",
+            label: "7. แบบพิมพ์",
             api: "ESL : /elss/els/sand/api/v1/ext/xxxxxxxxxxx",
             params: "",
             db: "",
@@ -796,7 +841,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "FIN",
-            label: "7. ชำระเงิน ใบสั่ง E000X",
+            label: "8. ชำระเงิน ใบสั่ง E000X",
             api: "",
             params: "",
             db: "",
@@ -805,7 +850,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "REG",
-            label: "8. จดทะเบียน",
+            label: "9. จดทะเบียน",
             api: "",
             params: "",
             db: "",
@@ -814,7 +859,7 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "9. เช็คสถานะ ",
+            label: "10. เช็คสถานะ ",
             api: "REG : /elss/api/v1/public/sec9/getProcessStatus/",
             params: "",
             db: "",
