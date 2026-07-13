@@ -26,7 +26,7 @@ const WORKFLOWS_DATA = {
             api: "REG : /elss/api/v1/public/sec9/processData",
             params: "",
             db: "",
-            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2"
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=266"
           },
           {
             from: "ELS",
@@ -89,7 +89,7 @@ const WORKFLOWS_DATA = {
             api: "REG : /elss/api/v1/public/evd/sendEvd",
             params: "",
             db: "",
-            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2"
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2 ส่ง checkEvdSts=3 ทุกครั้ง,checkCount และ evdCount=ตามรอบ"
           },
           {
             from: "User",
@@ -119,9 +119,18 @@ const WORKFLOWS_DATA = {
             notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
           },
           {
+            from: "REG",
+            to: "ELS",
+            label: "13. แบบพิมพ์",
+            api: "ESL : /elss/els/sand/api/v1/ext/xxxxxxxxxxx",
+            params: "",
+            db: "",
+            notes: "แบบพิมพ์ ดึงข้อมูล รายละเอียดดูดทราย tb_els_sec9,tb_els_sec9_property,tb_els_sec9_resource"
+          },
+          {
             from: "เจ้าหน้าที่",
             to: "FIN",
-            label: "13. ชำระเงิน ใบสั่ง E000X",
+            label: "14. ชำระเงิน ใบสั่ง E000X",
             api: "",
             params: "",
             db: "",
@@ -130,7 +139,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "REG",
-            label: "14. อนุมัติรับคำขอ",
+            label: "15. อนุมัติรับคำขอ",
             api: "",
             params: "",
             db: "",
@@ -138,7 +147,7 @@ const WORKFLOWS_DATA = {
           },{
             from: "schedule",
             to: "REG",
-            label: "15. เช็คสถานะ ",
+            label: "16. เช็คสถานะ ",
             api: "REG : /elss/api/v1/public/sec9/getProcessStatus/",
             params: "",
             db: "",
@@ -147,7 +156,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "EXP",
-            label: "16.ดำเนินการตามขั้นตอน EXP เจ้าหน้าที่กรอกข้อมูล",
+            label: "17.ดำเนินการตามขั้นตอน EXP เจ้าหน้าที่กรอกข้อมูล",
             api: "",
             params: "",
             db: "",
@@ -156,7 +165,7 @@ const WORKFLOWS_DATA = {
           {
             from: "EXP",
             to: "ELS",
-            label: "17. อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
+            label: "18. อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
             api: "ELS : ext/requests/workflow/committee/approve",
             params: "",
             db: "",
@@ -165,7 +174,7 @@ const WORKFLOWS_DATA = {
           {
             from: "EXP",
             to: "ELS",
-            label: "18. ไม่อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
+            label: "19. ไม่อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
             api: "ELS : /ext/requests/workflow/committee/reject",
             params: "",
             db: "",
@@ -174,7 +183,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "ELV",
-            label: "19. (อาจจะไม่มี) รอออกใบอนุญาต",
+            label: "20. (อาจจะไม่มี) รอออกใบอนุญาต",
             api: "ELS : /ext/requests/workflow/license/pending",
             params: "",
             db: "",
@@ -205,7 +214,7 @@ const WORKFLOWS_DATA = {
             api: "REG : /elss/api/v1/public/sec9/processData",
             params: "",
             db: "",
-            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2"
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=ขึ้นกับคำขอแรก ส่ง processOldSeq ด้วย"
           },
           {
             from: "ELS",
@@ -268,7 +277,7 @@ const WORKFLOWS_DATA = {
             api: "REG : /elss/api/v1/public/evd/sendEvd",
             params: "",
             db: "",
-            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2"
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2 ส่ง checkEvdSts=3 ทุกครั้ง, checkCount และ evdCount=ตามรอบ"
           },
           {
             from: "User",
@@ -394,7 +403,7 @@ const WORKFLOWS_DATA = {
             api: "REG : /elss/api/v1/public/sec9/processData",
             params: "",
             db: "",
-            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2"
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=317"
           },
           {
             from: "ELS",
@@ -457,7 +466,7 @@ const WORKFLOWS_DATA = {
             api: "REG : /elss/api/v1/public/evd/sendEvd",
             params: "",
             db: "",
-            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2"
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2 ส่ง checkEvdSts=3 ทุกครั้ง, checkCount และ evdCount=ตามรอบ"
           },
           {
             from: "User",
@@ -487,9 +496,18 @@ const WORKFLOWS_DATA = {
             notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
           },
           {
+            from: "REG",
+            to: "ELS",
+            label: "13. แบบพิมพ์",
+            api: "ESL : /elss/els/sand/api/v1/ext/xxxxxxxxxxx",
+            params: "",
+            db: "",
+            notes: "แบบพิมพ์ ดึงข้อมูล รายละเอียดดูดทราย tb_els_sec9,tb_els_sec9_property,tb_els_sec9_resource"
+          },
+          {
             from: "เจ้าหน้าที่",
             to: "FIN",
-            label: "13. ชำระเงิน ใบสั่ง E000X",
+            label: "14. ชำระเงิน ใบสั่ง E000X",
             api: "",
             params: "",
             db: "",
@@ -498,7 +516,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "REG",
-            label: "14. อนุมัติรับคำขอ",
+            label: "15. อนุมัติรับคำขอ",
             api: "",
             params: "",
             db: "",
@@ -506,7 +524,7 @@ const WORKFLOWS_DATA = {
           },{
             from: "schedule",
             to: "REG",
-            label: "15. เช็คสถานะ ",
+            label: "16. เช็คสถานะ ",
             api: "REG : /elss/api/v1/public/sec9/getProcessStatus/",
             params: "",
             db: "",
@@ -515,7 +533,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "EXP",
-            label: "16.ดำเนินการตามขั้นตอน EXP เจ้าหน้าที่กรอกข้อมูล",
+            label: "17.ดำเนินการตามขั้นตอน EXP เจ้าหน้าที่กรอกข้อมูล",
             api: "",
             params: "",
             db: "",
@@ -524,7 +542,7 @@ const WORKFLOWS_DATA = {
           {
             from: "EXP",
             to: "ELS",
-            label: "17. อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
+            label: "18. อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
             api: "ELS : ext/requests/workflow/committee/approve",
             params: "",
             db: "",
@@ -533,7 +551,7 @@ const WORKFLOWS_DATA = {
           {
             from: "EXP",
             to: "ELS",
-            label: "18. ไม่อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
+            label: "19. ไม่อนุญาต (ผลพิจารณา คณะกรรมการอนุญาต)",
             api: "ELS : /ext/requests/workflow/committee/reject",
             params: "",
             db: "",
@@ -542,7 +560,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "ELV",
-            label: "19. (อาจจะไม่มี) รอออกใบอนุญาต",
+            label: "20. (อาจจะไม่มี) รอออกใบอนุญาต",
             api: "ELS : /ext/requests/workflow/license/pending",
             params: "",
             db: "",
@@ -573,7 +591,7 @@ const WORKFLOWS_DATA = {
             api: "REG : /elss/api/v1/public/sec9/processData",
             params: "",
             db: "",
-            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2"
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=246"
           },
           {
             from: "ELS",
@@ -636,7 +654,7 @@ const WORKFLOWS_DATA = {
             api: "REG : /elss/api/v1/public/evd/sendEvd",
             params: "",
             db: "",
-            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2"
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2 ส่ง checkEvdSts=3 ทุกครั้ง, checkCount และ evdCount=ตามรอบ"
           },
           {
             from: "User",
@@ -675,9 +693,18 @@ const WORKFLOWS_DATA = {
             notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
           },
           {
+            from: "REG",
+            to: "ELS",
+            label: "14. แบบพิมพ์",
+            api: "ESL : /elss/els/sand/api/v1/ext/xxxxxxxxxxx",
+            params: "",
+            db: "",
+            notes: "แบบพิมพ์ ดึงข้อมูล รายละเอียดดูดทราย "
+          },
+          {
             from: "เจ้าหน้าที่",
             to: "FIN",
-            label: "14. ชำระเงิน ใบสั่ง E000X",
+            label: "15. ชำระเงิน ใบสั่ง E000X",
             api: "",
             params: "",
             db: "",
@@ -686,7 +713,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "REG",
-            label: "15. อนุมัติรับคำขอ",
+            label: "16. อนุมัติรับคำขอ",
             api: "",
             params: "",
             db: "",
@@ -695,7 +722,7 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "16. เช็คสถานะ ",
+            label: "17. เช็คสถานะ ",
             api: "REG : /elss/api/v1/public/sec9/getProcessStatus/",
             params: "",
             db: "",
@@ -756,9 +783,18 @@ const WORKFLOWS_DATA = {
             notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
           },
           {
+            from: "REG",
+            to: "ELS",
+            label: "6. แบบพิมพ์",
+            api: "ESL : /elss/els/sand/api/v1/ext/xxxxxxxxxxx",
+            params: "",
+            db: "",
+            notes: "แบบพิมพ์ ดึงข้อมูล รายละเอียดดูดทราย "
+          },
+          {
             from: "เจ้าหน้าที่",
             to: "FIN",
-            label: "6. ชำระเงิน ใบสั่ง E000X",
+            label: "7. ชำระเงิน ใบสั่ง E000X",
             api: "",
             params: "",
             db: "",
@@ -767,7 +803,7 @@ const WORKFLOWS_DATA = {
           {
             from: "เจ้าหน้าที่",
             to: "REG",
-            label: "7. จดทะเบียน",
+            label: "8. จดทะเบียน",
             api: "",
             params: "",
             db: "",
@@ -776,7 +812,7 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "16. เช็คสถานะ ",
+            label: "17. เช็คสถานะ ",
             api: "REG : /elss/api/v1/public/sec9/getProcessStatus/",
             params: "",
             db: "",
