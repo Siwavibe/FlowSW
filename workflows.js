@@ -946,8 +946,17 @@ const WORKFLOWS_DATA = {
           {
             from: "User",
             to: "schedule",
-            label: "13. กรณี ตรวจผ่าน ไป ชำระเงิน",
-            api: "กรมบัญชีกลาง : /elss/api/v1/public/evd/sendEvd",
+            label: "13. กรณี ตรวจผ่าน กด พิมพ์ใบแจ้งชำระเงิน",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "14. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
             params: "",
             db: "",
             notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
@@ -955,11 +964,83 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "14. สถานะ ชำระเงิน",
+            label: "15. สถานะ ชำระเงิน",
             api: "REG : /elss/api/v1/public/order/saveOrder",
             params: "",
             db: "",
             notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "16. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "17. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "18. อนุมัติรับคำขอ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูอนุมัติรับคำขอ ส่งเรื่องไปให้ EXP "
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "19. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/sec9/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "20. บันทึกเลขใบอนุญาตในบัญชีคุม",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
+          },
+          {
+            from: "REG",
+            to: "ELS",
+            label: "21. ไม่รู้จะยิงออกหรือยิงเข้า ถามพี่ตา?",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "22. เมนู ติดตาม กดดำเนินการเพื่อสร้าง คิววันที่ 2",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "23. เมนู ติดตาม กดดำเนินการเพื่อสร้าง คิววันที่ 2",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
           }
         ]
           
