@@ -947,7 +947,7 @@ const WORKFLOWS_DATA = {
             from: "ELS",
             to: "REG",
             label: "5. ส่งคำขอ",
-            api: "REG : /elss/api/v1/public/sec9/processData",
+            api: "REG : /elss/api/v1/public/project/processData",
             params: "",
             db: "",
             notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=267"
@@ -1088,10 +1088,11 @@ const WORKFLOWS_DATA = {
             notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
           },
           {
-            from: "REG",
-            to: "ELS",
-            label: "21. ไม่รู้จะยิงออกหรือยิงเข้า ถามพี่ตา?",
-            api: "",
+            from: "Schedule",
+            to: "REG",
+            label: "21. มติคณะกรรมการ",
+            api: "REG : /elss/api/v1/public................",
+            method: "GET",
             params: "",
             db: "",
             notes: ""
@@ -1213,89 +1214,2103 @@ const WORKFLOWS_DATA = {
             db: "",
             notes: ""
           },
-        ]
-          
-        
+        ] 
       },
       {
         id: "land-req-2",
         title: "2. คำขอแก้ไขเปลี่ยนแปลงแผนผังโครงการหรือวิธีการในการจัดสรรที่ดิน",
-        description: "การขอปรับปรุงแผนผังการจัดสรรที่ดิน หรือเปลี่ยนแปลงวิธีการจัดสรรที่เคยได้รับอนุญาตไว้เดิม",
-        systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
+        description: "การขอปรับปรุงแผนผังการจัดสรรที่ดิน หรือเปลี่ยนแปลงวิธีการจัดสรรที่เคยได้รับอนุญาตไว้เดิม (หนังสืออนุญาต)",
+        systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN","EVD"],
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
         steps: [
-
+          {
+            from: "User",
+            to: "ELS",
+            label: "1. Popup ค้นหาโครงการ/สำนักงาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "2. ค้นหา Project",
+            api: "REG : /elss/api/v1/public/project/search",
+            params: "",
+            db: "",
+            notes: "ค้นหาโครงการจาก DOL2"
+          },          
+          {
+            from: "User",
+            to: "ELS",
+            label: "3. กดปุ่ม ส่งคำขอคำขอไปตรวจสอบ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ผู้ขอกดปุ่มส่งคำขอผ่านระบบ จากแท๊บ แนบเอกสารหลักฐาน "
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "4. ส่งคำขอ",
+            api: "REG : /elss/api/v1/public/project/processData",
+            params: "",
+            db: "",
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=270 ส่ง projectSeq , prjChgPlanData"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "5. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "6. เมนู นัดล่วงหน้า > Popup เอกสารหลักฐาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ดำเนินการคำขอที่ส่งมายัง DOL2 เพื่อตรวจเอกสาร"
+          },
+          {
+            from: "REG",
+            to: "minio",
+            label: "7. กดดูไฟล์",
+            api: "minio : /elss/minio-file-service/api/v1/ext/file/view/xxxxx.pdf",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสารเพื่อเปิดดูไฟล์ที่ eLicense"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "8. ตรวจเอกสาร ผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "ตรวจเอกสาร หลักฐาน"
+          },
+          {
+            from: "REG",
+            to: "ELS",
+            label: "9. บันทึกผล ตรวจผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสาร ส่งผลตรวจเอกสารหลักฐานไปยัง eLicense และ ELS ส่ง mail ต่อ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "10. กรณี ไม่ผ่าน แนบไฟล์รอบที่ n",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แนบไฟล์และส่งใหม่อีกครั้ง"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "11. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2 ส่ง checkEvdSts=3 ทุกครั้ง, checkCount และ evdCount=ตามรอบ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "12. กรณี ตรวจผ่าน กด พิมพ์ใบแจ้งชำระเงิน",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "13. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "14. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "15. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "16. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "17. อนุมัติรับคำขอ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูอนุมัติรับคำขอ ส่งเรื่องไปให้ EXP "
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "18. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/project/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "19. บันทึกเลขใบอนุญาตในบัญชีคุม",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
+          },
+          {
+            from: "Schedule",
+            to: "REG",
+            label: "20. มติคณะกรรมการ มั้ย??",
+            api: "REG : /elss/api/v1/public................",
+            method: "GET",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "21. เมนู ติดตาม กดดำเนินการเพื่อสร้าง คิววันที่ 2",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "22. พิมพ์ใบแจ้งชำระเงิน ",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน ค่าใบอนุญาต"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "23. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "24. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "25. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "26. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "27. จดทะเบียน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "จดทะเบียน"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "28. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/project/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "EVD",
+            label: "29. แสกนหนังสืออนุญาต",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แสกนหนังสืออนุญาต"
+          },
+          {
+            from: "EVD",
+            to: "ELS",
+            label: "30. ส่งภาพแสกน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ไฟล์ DOL2 มา ELicense"
+          },
+          {
+            from: "ELS",
+            to: "minio",
+            label: "31. ไฟล์ไปไว้ใน minio",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "minio",
+            label: "32. insert ELV ให้",
+            api: "",
+            params: "",
+            db: "",
+            notes: "tb_elv_license_paper"
+          }
         ]
       },
       {
         id: "land-req-3",
         title: "3. คำขอโอนใบอนุญาต",
-        description: "การขอโอนใบอนุญาตจัดสรรที่ดินจากผู้จัดสรรที่ดินรายเดิม ไปยังผู้ประกอบการรายใหม่",
-         systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
+        description: "การขอโอนใบอนุญาตจัดสรรที่ดินจากผู้จัดสรรที่ดินรายเดิม ไปยังผู้ประกอบการรายใหม่ (หนังสืออนุญาต)",
+         systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN","EVD"],
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
         steps: [
-
+          {
+            from: "User",
+            to: "ELS",
+            label: "1. Popup ค้นหาโครงการ/สำนักงาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "2. ค้นหา Project",
+            api: "REG : /elss/api/v1/public/project/search",
+            params: "",
+            db: "",
+            notes: "ค้นหาโครงการจาก DOL2"
+          },          
+          {
+            from: "User",
+            to: "ELS",
+            label: "3. กดปุ่ม ส่งคำขอคำขอไปตรวจสอบ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ผู้ขอกดปุ่มส่งคำขอผ่านระบบ จากแท๊บ แนบเอกสารหลักฐาน "
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "4. ส่งคำขอ",
+            api: "REG : /elss/api/v1/public/project/processData",
+            params: "",
+            db: "",
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=268 ส่ง projectSeq , prjTrfLicesnseData"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "5. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "6. เมนู นัดล่วงหน้า > Popup เอกสารหลักฐาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ดำเนินการคำขอที่ส่งมายัง DOL2 เพื่อตรวจเอกสาร"
+          },
+          {
+            from: "REG",
+            to: "minio",
+            label: "7. กดดูไฟล์",
+            api: "minio : /elss/minio-file-service/api/v1/ext/file/view/xxxxx.pdf",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสารเพื่อเปิดดูไฟล์ที่ eLicense"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "8. ตรวจเอกสาร ผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "ตรวจเอกสาร หลักฐาน"
+          },
+          {
+            from: "REG",
+            to: "ELS",
+            label: "9. บันทึกผล ตรวจผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสาร ส่งผลตรวจเอกสารหลักฐานไปยัง eLicense และ ELS ส่ง mail ต่อ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "10. กรณี ไม่ผ่าน แนบไฟล์รอบที่ n",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แนบไฟล์และส่งใหม่อีกครั้ง"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "11. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2 ส่ง checkEvdSts=3 ทุกครั้ง, checkCount และ evdCount=ตามรอบ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "12. กรณี ตรวจผ่าน กด พิมพ์ใบแจ้งชำระเงิน",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "13. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "14. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "15. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "16. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "17. อนุมัติรับคำขอ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูอนุมัติรับคำขอ ส่งเรื่องไปให้ EXP "
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "18. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/project/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "19. บันทึกเลขใบอนุญาตในบัญชีคุม",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
+          },
+          {
+            from: "Schedule",
+            to: "REG",
+            label: "20. มติคณะกรรมการ มั้ย??",
+            api: "REG : /elss/api/v1/public................",
+            method: "GET",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "21. เมนู ติดตาม กดดำเนินการเพื่อสร้าง คิววันที่ 2",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "22. พิมพ์ใบแจ้งชำระเงิน ",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน ค่าใบอนุญาต"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "23. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "24. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "25. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "26. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "27. จดทะเบียน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "จดทะเบียน"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "28. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/project/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "EVD",
+            label: "29. แสกนหนังสืออนุญาต",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แสกนหนังสืออนุญาต"
+          },
+          {
+            from: "EVD",
+            to: "ELS",
+            label: "30. ส่งภาพแสกน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ไฟล์ DOL2 มา ELicense"
+          },
+          {
+            from: "ELS",
+            to: "minio",
+            label: "31. ไฟล์ไปไว้ใน minio",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "minio",
+            label: "32. insert ELV ให้",
+            api: "",
+            params: "",
+            db: "",
+            notes: "tb_elv_license_paper"
+          }        
         ]
       },
       {
         id: "land-req-4",
         title: "4. คำขอรับโอนใบอนุญาต (กรณีผู้จัดสรรที่ดินตาย)",
-        description: "ทายาทหรือผู้จัดการมรดกยื่นคำขอรับโอนใบอนุญาตจัดสรรที่ดินเนื่องจากผู้ได้รับใบอนุญาตเดิมเสียชีวิต",
-         systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
+        description: "ทายาทหรือผู้จัดการมรดกยื่นคำขอรับโอนใบอนุญาตจัดสรรที่ดินเนื่องจากผู้ได้รับใบอนุญาตเดิมเสียชีวิต (หนังสืออนุญาต)",
+         systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN","EVD"],
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
         steps: [
-
+          {
+            from: "User",
+            to: "ELS",
+            label: "1. Popup ค้นหาโครงการ/สำนักงาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "2. ค้นหา Project",
+            api: "REG : /elss/api/v1/public/project/search",
+            params: "",
+            db: "",
+            notes: "ค้นหาโครงการจาก DOL2"
+          },          
+          {
+            from: "User",
+            to: "ELS",
+            label: "3. กดปุ่ม ส่งคำขอคำขอไปตรวจสอบ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ผู้ขอกดปุ่มส่งคำขอผ่านระบบ จากแท๊บ แนบเอกสารหลักฐาน "
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "4. ส่งคำขอ",
+            api: "REG : /elss/api/v1/public/project/processData",
+            params: "",
+            db: "",
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=277 ส่ง projectSeq , prjTrfLicesnseData"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "5. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "6. เมนู นัดล่วงหน้า > Popup เอกสารหลักฐาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ดำเนินการคำขอที่ส่งมายัง DOL2 เพื่อตรวจเอกสาร"
+          },
+          {
+            from: "REG",
+            to: "minio",
+            label: "7. กดดูไฟล์",
+            api: "minio : /elss/minio-file-service/api/v1/ext/file/view/xxxxx.pdf",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสารเพื่อเปิดดูไฟล์ที่ eLicense"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "8. ตรวจเอกสาร ผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "ตรวจเอกสาร หลักฐาน"
+          },
+          {
+            from: "REG",
+            to: "ELS",
+            label: "9. บันทึกผล ตรวจผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสาร ส่งผลตรวจเอกสารหลักฐานไปยัง eLicense และ ELS ส่ง mail ต่อ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "10. กรณี ไม่ผ่าน แนบไฟล์รอบที่ n",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แนบไฟล์และส่งใหม่อีกครั้ง"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "11. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2 ส่ง checkEvdSts=3 ทุกครั้ง, checkCount และ evdCount=ตามรอบ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "12. กรณี ตรวจผ่าน กด พิมพ์ใบแจ้งชำระเงิน",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "13. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "14. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "15. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "16. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "17. อนุมัติรับคำขอ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูอนุมัติรับคำขอ ส่งเรื่องไปให้ EXP "
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "18. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/project/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "19. บันทึกเลขใบอนุญาตในบัญชีคุม",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
+          },
+          {
+            from: "Schedule",
+            to: "REG",
+            label: "20. มติคณะกรรมการ มั้ย??",
+            api: "REG : /elss/api/v1/public................",
+            method: "GET",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "21. เมนู ติดตาม กดดำเนินการเพื่อสร้าง คิววันที่ 2",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "22. พิมพ์ใบแจ้งชำระเงิน ",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน ค่าใบอนุญาต"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "23. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "24. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "25. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "26. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "27. จดทะเบียน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "จดทะเบียน"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "28. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/project/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "EVD",
+            label: "29. แสกนหนังสืออนุญาต",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แสกนหนังสืออนุญาต"
+          },
+          {
+            from: "EVD",
+            to: "ELS",
+            label: "30. ส่งภาพแสกน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ไฟล์ DOL2 มา ELicense"
+          },
+          {
+            from: "ELS",
+            to: "minio",
+            label: "31. ไฟล์ไปไว้ใน minio",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "minio",
+            label: "32. insert ELV ให้",
+            api: "",
+            params: "",
+            db: "",
+            notes: "tb_elv_license_paper"
+          }      
         ]
       },
       {
         id: "land-req-5",
         title: "5. คำขอรับใบแทนใบอนุญาต",
-        description: "การขอใบแทนใบอนุญาตทำการจัดสรรที่ดิน (อ.ส.ป. 1) กรณีเอกสารสูญหาย ชำรุด หรือเลอะเลือน",
-         systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
+        description: "การขอใบแทนใบอนุญาตทำการจัดสรรที่ดิน กรณีเอกสารสูญหาย ชำรุด หรือเลอะเลือน",
+         systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN","EVD"],
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
         steps: [
-
+          {
+            from: "User",
+            to: "ELS",
+            label: "1. Popup ค้นหาโครงการ/สำนักงาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "2. ค้นหา Project",
+            api: "REG : /elss/api/v1/public/project/search",
+            params: "",
+            db: "",
+            notes: "ค้นหาโครงการจาก DOL2"
+          },          
+          {
+            from: "User",
+            to: "ELS",
+            label: "3. กดปุ่ม ส่งคำขอคำขอไปตรวจสอบ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ผู้ขอกดปุ่มส่งคำขอผ่านระบบ จากแท๊บ แนบเอกสารหลักฐาน "
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "4. ส่งคำขอ",
+            api: "REG : /elss/api/v1/public/project/processData",
+            params: "",
+            db: "",
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=255 ยังไม่รองรับ"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "5. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "6. เมนู นัดล่วงหน้า > Popup เอกสารหลักฐาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ดำเนินการคำขอที่ส่งมายัง DOL2 เพื่อตรวจเอกสาร"
+          },
+          {
+            from: "REG",
+            to: "minio",
+            label: "7. กดดูไฟล์",
+            api: "minio : /elss/minio-file-service/api/v1/ext/file/view/xxxxx.pdf",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสารเพื่อเปิดดูไฟล์ที่ eLicense"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "8. ตรวจเอกสาร ผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "ตรวจเอกสาร หลักฐาน"
+          },
+          {
+            from: "REG",
+            to: "ELS",
+            label: "9. บันทึกผล ตรวจผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสาร ส่งผลตรวจเอกสารหลักฐานไปยัง eLicense และ ELS ส่ง mail ต่อ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "10. กรณี ไม่ผ่าน แนบไฟล์รอบที่ n",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แนบไฟล์และส่งใหม่อีกครั้ง"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "11. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2 ส่ง checkEvdSts=3 ทุกครั้ง, checkCount และ evdCount=ตามรอบ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "12. กรณี ตรวจผ่าน กด พิมพ์ใบแจ้งชำระเงิน",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "13. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "14. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "15. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "16. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "17. อนุมัติรับคำขอ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูอนุมัติรับคำขอ ส่งเรื่องไปให้ EXP "
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "18. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/project/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "19. บันทึกเลขใบอนุญาตในบัญชีคุม",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
+          },
+          {
+            from: "Schedule",
+            to: "REG",
+            label: "20. มติคณะกรรมการ มั้ย??",
+            api: "REG : /elss/api/v1/public................",
+            method: "GET",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "21. เมนู ติดตาม กดดำเนินการเพื่อสร้าง คิววันที่ 2",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "22. พิมพ์ใบแจ้งชำระเงิน ",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน ค่าใบอนุญาต"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "23. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "24. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "25. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "26. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "27. จดทะเบียน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "จดทะเบียน"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "28. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/project/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "EVD",
+            label: "29. แสกนหนังสืออนุญาต",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แสกนหนังสืออนุญาต"
+          },
+          {
+            from: "EVD",
+            to: "ELS",
+            label: "30. ส่งภาพแสกน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ไฟล์ DOL2 มา ELicense"
+          },
+          {
+            from: "ELS",
+            to: "minio",
+            label: "31. ไฟล์ไปไว้ใน minio",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "minio",
+            label: "32. insert ELV ให้",
+            api: "",
+            params: "",
+            db: "",
+            notes: "tb_elv_license_paper"
+          }    
         ]
       },
       {
         id: "land-req-6",
         title: "6. คำขอยกเลิกการจัดสรรที่ดิน",
         description: "ผู้จัดสรรยื่นคำขอยกเลิกการทำการจัดสรรที่ดินทั้งหมดหรือบางส่วนที่ยังไม่ได้ทำการจำหน่ายให้แก่ผู้ซื้อ",
-         systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
+         systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN","EVD"],
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
         steps: [
-
+          {
+            from: "User",
+            to: "ELS",
+            label: "1. Popup ค้นหาโครงการ/สำนักงาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "2. ค้นหา Project",
+            api: "REG : /elss/api/v1/public/project/search",
+            params: "",
+            db: "",
+            notes: "ค้นหาโครงการจาก DOL2"
+          },          
+          {
+            from: "User",
+            to: "ELS",
+            label: "3. กดปุ่ม ส่งคำขอคำขอไปตรวจสอบ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ผู้ขอกดปุ่มส่งคำขอผ่านระบบ จากแท๊บ แนบเอกสารหลักฐาน "
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "4. ส่งคำขอ",
+            api: "REG : /elss/api/v1/public/project/processData",
+            params: "",
+            db: "",
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=277 ส่ง projectSeq , prjTrfLicesnseData"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "5. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "6. เมนู นัดล่วงหน้า > Popup เอกสารหลักฐาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ดำเนินการคำขอที่ส่งมายัง DOL2 เพื่อตรวจเอกสาร"
+          },
+          {
+            from: "REG",
+            to: "minio",
+            label: "7. กดดูไฟล์",
+            api: "minio : /elss/minio-file-service/api/v1/ext/file/view/xxxxx.pdf",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสารเพื่อเปิดดูไฟล์ที่ eLicense"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "8. ตรวจเอกสาร ผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "ตรวจเอกสาร หลักฐาน"
+          },
+          {
+            from: "REG",
+            to: "ELS",
+            label: "9. บันทึกผล ตรวจผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสาร ส่งผลตรวจเอกสารหลักฐานไปยัง eLicense และ ELS ส่ง mail ต่อ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "10. กรณี ไม่ผ่าน แนบไฟล์รอบที่ n",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แนบไฟล์และส่งใหม่อีกครั้ง"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "11. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2 ส่ง checkEvdSts=3 ทุกครั้ง, checkCount และ evdCount=ตามรอบ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "12. กรณี ตรวจผ่าน กด พิมพ์ใบแจ้งชำระเงิน",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "13. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "14. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "15. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "16. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "17. อนุมัติรับคำขอ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูอนุมัติรับคำขอ ส่งเรื่องไปให้ EXP "
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "18. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/project/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "19. บันทึกเลขใบอนุญาตในบัญชีคุม",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
+          },
+          {
+            from: "Schedule",
+            to: "REG",
+            label: "20. มติคณะกรรมการ มั้ย??",
+            api: "REG : /elss/api/v1/public................",
+            method: "GET",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "21. เมนู ติดตาม กดดำเนินการเพื่อสร้าง คิววันที่ 2",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "22. พิมพ์ใบแจ้งชำระเงิน ",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน ค่าใบอนุญาต"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "23. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "24. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "25. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "26. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "27. จดทะเบียน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "จดทะเบียน"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "28. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/project/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "EVD",
+            label: "29. แสกนหนังสืออนุญาต",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แสกนหนังสืออนุญาต"
+          },
+          {
+            from: "EVD",
+            to: "ELS",
+            label: "30. ส่งภาพแสกน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ไฟล์ DOL2 มา ELicense"
+          },
+          {
+            from: "ELS",
+            to: "minio",
+            label: "31. ไฟล์ไปไว้ใน minio",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "minio",
+            label: "32. insert ELV ให้",
+            api: "",
+            params: "",
+            db: "",
+            notes: "tb_elv_license_paper"
+          }     
         ]
       },
       {
         id: "land-req-7",
         title: "7. คำขออนุญาตก่อภาระผูกฟันในที่ดินจัดสรร",
         description: "ผู้จัดสรรยื่นคำขอรับอนุญาตก่อภาระผูกพัน (เช่น จดจำนอง หรือก่อสิทธิ์ภาระจำยอม) ในที่ดินโครงการจัดสรร",
-        systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
+        systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN","EVD"],
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
         steps: [
-
+          {
+            from: "User",
+            to: "ELS",
+            label: "1. Popup ค้นหาโครงการ/สำนักงาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "2. ค้นหา Project",
+            api: "REG : /elss/api/v1/public/project/search",
+            params: "",
+            db: "",
+            notes: "ค้นหาโครงการจาก DOL2"
+          },          
+          {
+            from: "User",
+            to: "ELS",
+            label: "3. กดปุ่ม ส่งคำขอคำขอไปตรวจสอบ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ผู้ขอกดปุ่มส่งคำขอผ่านระบบ จากแท๊บ แนบเอกสารหลักฐาน "
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "4. ส่งคำขอ",
+            api: "REG : /elss/api/v1/public/project/processData",
+            params: "",
+            db: "",
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=277 ส่ง projectSeq , prjTrfLicesnseData"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "5. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "6. เมนู นัดล่วงหน้า > Popup เอกสารหลักฐาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ดำเนินการคำขอที่ส่งมายัง DOL2 เพื่อตรวจเอกสาร"
+          },
+          {
+            from: "REG",
+            to: "minio",
+            label: "7. กดดูไฟล์",
+            api: "minio : /elss/minio-file-service/api/v1/ext/file/view/xxxxx.pdf",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสารเพื่อเปิดดูไฟล์ที่ eLicense"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "8. ตรวจเอกสาร ผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "ตรวจเอกสาร หลักฐาน"
+          },
+          {
+            from: "REG",
+            to: "ELS",
+            label: "9. บันทึกผล ตรวจผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสาร ส่งผลตรวจเอกสารหลักฐานไปยัง eLicense และ ELS ส่ง mail ต่อ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "10. กรณี ไม่ผ่าน แนบไฟล์รอบที่ n",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แนบไฟล์และส่งใหม่อีกครั้ง"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "11. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2 ส่ง checkEvdSts=3 ทุกครั้ง, checkCount และ evdCount=ตามรอบ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "12. กรณี ตรวจผ่าน กด พิมพ์ใบแจ้งชำระเงิน",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "13. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "14. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "15. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "16. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "17. อนุมัติรับคำขอ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูอนุมัติรับคำขอ ส่งเรื่องไปให้ EXP "
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "18. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/project/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "19. บันทึกเลขใบอนุญาตในบัญชีคุม",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
+          },
+          {
+            from: "Schedule",
+            to: "REG",
+            label: "20. มติคณะกรรมการ มั้ย??",
+            api: "REG : /elss/api/v1/public................",
+            method: "GET",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "21. เมนู ติดตาม กดดำเนินการเพื่อสร้าง คิววันที่ 2",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "22. พิมพ์ใบแจ้งชำระเงิน ",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน ค่าใบอนุญาต"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "23. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "24. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "25. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "26. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "27. จดทะเบียน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "จดทะเบียน"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "28. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/project/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "EVD",
+            label: "29. แสกนหนังสืออนุญาต",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แสกนหนังสืออนุญาต"
+          },
+          {
+            from: "EVD",
+            to: "ELS",
+            label: "30. ส่งภาพแสกน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ไฟล์ DOL2 มา ELicense"
+          },
+          {
+            from: "ELS",
+            to: "minio",
+            label: "31. ไฟล์ไปไว้ใน minio",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "minio",
+            label: "32. insert ELV ให้",
+            api: "",
+            params: "",
+            db: "",
+            notes: "tb_elv_license_paper"
+          }         
         ]
-      },
+      },      
       {
         id: "land-req-8",
         title: "8. คำขอจดทะเบียนจัดตั้งนิติบุคคลหมู่บ้านจัดสรร",
-        description: "ผู้ซื้อแปลงย่อยหรือผู้จัดสรรร่วมมือกันยื่นจดทะเบียนจัดตั้งนิติบุคคลหมู่บ้านจัดสรร เพื่อรับมอบสิทธิ์ระบบสาธารณูปโภคเข้ามาบริหาร",
-         systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN"],
+        description: "ผู้ซื้อแปลงย่อยหรือผู้จัดสรรร่วมมือกันยื่นจดทะเบียนจัดตั้งนิติบุคคลหมู่บ้านจัดสรร (หนังสือสำคัญ)",
+         systems: ["User", "minio", "ELS", "schedule", "ELV", "เจ้าหน้าที่","REG", "FIN","EVD"],
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
         steps: [
-
+          {
+            from: "User",
+            to: "ELS",
+            label: "1. Popup ค้นหาโครงการ/สำนักงาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "2. ค้นหา Project",
+            api: "REG : /elss/api/v1/public/project/search",
+            params: "",
+            db: "",
+            notes: "ค้นหาโครงการจาก DOL2"
+          },          
+          {
+            from: "User",
+            to: "ELS",
+            label: "3. กดปุ่ม ส่งคำขอคำขอไปตรวจสอบ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ผู้ขอกดปุ่มส่งคำขอผ่านระบบ จากแท๊บ แนบเอกสารหลักฐาน "
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "4. ส่งคำขอ",
+            api: "REG : /elss/api/v1/public/project/processData",
+            params: "",
+            db: "",
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=277 ส่ง projectSeq , prjTrfLicesnseData"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "5. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "6. เมนู นัดล่วงหน้า > Popup เอกสารหลักฐาน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ดำเนินการคำขอที่ส่งมายัง DOL2 เพื่อตรวจเอกสาร"
+          },
+          {
+            from: "REG",
+            to: "minio",
+            label: "7. กดดูไฟล์",
+            api: "minio : /elss/minio-file-service/api/v1/ext/file/view/xxxxx.pdf",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสารเพื่อเปิดดูไฟล์ที่ eLicense"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "8. ตรวจเอกสาร ผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "ตรวจเอกสาร หลักฐาน"
+          },
+          {
+            from: "REG",
+            to: "ELS",
+            label: "9. บันทึกผล ตรวจผ่าน/ไม่ผ่าน",
+            api: "ELS : /elss/els/sand/api/v1/ext/receive-dol/check-evd",
+            params: "",
+            db: "",
+            notes: "เมนูนัดล่วงหน้า Popup ตรวจเอกสาร ส่งผลตรวจเอกสารหลักฐานไปยัง eLicense และ ELS ส่ง mail ต่อ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "10. กรณี ไม่ผ่าน แนบไฟล์รอบที่ n",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แนบไฟล์และส่งใหม่อีกครั้ง"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "11. ส่งเอกสารหลักฐาน",
+            api: "REG : /elss/api/v1/public/evd/sendEvd",
+            params: "",
+            db: "",
+            notes: "ส่งรายการหลักฐานประกอบคำขอไปยัง DOL2 ส่ง checkEvdSts=3 ทุกครั้ง, checkCount และ evdCount=ตามรอบ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "12. กรณี ตรวจผ่าน กด พิมพ์ใบแจ้งชำระเงิน",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "13. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "14. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "15. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "16. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "17. อนุมัติรับคำขอ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูอนุมัติรับคำขอ ส่งเรื่องไปให้ EXP "
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "18. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/project/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "19. บันทึกเลขใบอนุญาตในบัญชีคุม",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
+          },
+          {
+            from: "Schedule",
+            to: "REG",
+            label: "20. มติคณะกรรมการ มั้ย??",
+            api: "REG : /elss/api/v1/public................",
+            method: "GET",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "21. เมนู ติดตาม กดดำเนินการเพื่อสร้าง คิววันที่ 2",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "22. พิมพ์ใบแจ้งชำระเงิน ",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน ค่าใบอนุญาต"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "23. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "24. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "25. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "26. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "27. จดทะเบียน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "จดทะเบียน"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "28. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/project/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "EVD",
+            label: "29. แสกนหนังสือสำคัญ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "แสกนหนังสือสำคัญ"
+          },
+          {
+            from: "EVD",
+            to: "ELS",
+            label: "30. ส่งภาพแสกน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ไฟล์ DOL2 มา ELicense"
+          },
+          {
+            from: "ELS",
+            to: "minio",
+            label: "31. ไฟล์ไปไว้ใน minio",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "ELS",
+            to: "minio",
+            label: "32. insert ELV ให้",
+            api: "",
+            params: "",
+            db: "",
+            notes: "tb_elv_license_paper"
+          }        
         ]
-      }
+      }      
     ]
   },
-  schedule: {
-    title: "งานตั้งเวลา (Schedule)",
-    description: "ระบบประมวลผลอัตโนมัติเบื้องหลัง",
+  others: {
+    title: "อื่นๆ (Others)",
+    description: "ระบบและงานประมวลผลอื่นๆ",
     requests: [
       {
         id: "schedule-req-1",
-        title: "1. งาน Schedule (งานตั้งเวลา)",
+        title: "1. งาน Schedule",
         description: "งานประมวลผลเบื้องหลังตามเวลาที่กำหนด (Background Schedule Jobs) ที่ไม่ได้ผูกกับขั้นตอนของคำขอโดยตรง",
         systems: ["schedule", "ELS", "ELV","minio","REG","กรมบัญชีกลาง"],
         meetingNotes: "งานระบบเบื้องหลัง (Cron Job/Scheduler):\n• ทำงานอัตโนมัติตามช่วงเวลาที่กำหนด",
@@ -1312,21 +3327,115 @@ const WORKFLOWS_DATA = {
           {
             from: "schedule",
             to: "REG",
-            label: "2. ตรวจสอบสถานะ อนุมัติ/จดทะเบียน",
+            label: "2. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ถ้า ชำระเงินแล้ว ส่งค่าใช้จ่ายไปยัง DOL2 ถ้าส่งไม่สำเร็จส่งใหม่ ทุก 5 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "3. ตรวจสอบสถานะ อนุมัติ/จดทะเบียน",
             api: "REG : /eLicense-service/elss/elss/api/v1/public/sec9/getProcessStatus/xxxxxxx",
+            method: "GET",
             params: "",
             db: "",
             notes: "getProcessStatus ใช้เลข processSeq ทุก 15 นาที ตั้งแต่ 6.00 - 22.55 น."
+          },          
+          {
+            from: "schedule",
+            to: "REG",
+            label: "4. มติคณะกรรมการ",
+            api: "REG : /elss/api/v1/public................",
+            method: "GET",
+            params: "",
+            db: "",
+            notes: "เลขที่ใบอนุญาต"
           },
           {
             from: "schedule",
             to: "ELV",
-            label: "3. สิ้นสุดใบอนุญาตดูดทราย ",
+            label: "5. สิ้นสุดใบอนุญาตดูดทราย ",
             api: "",
             params: "",
             db: "",
             notes: "update tb_elv_sec9_license_new.status_flag=F สิ้นสุดระยะเวลาของใบอนุญาต ทุก 23.58 น."
+          },
+        ]
+      },
+      {
+        id: "elv-search-req",
+        title: "2. ELV ค้นหาใบอนุญาต",
+        description: "ค้นหาใบอนุญาต ",
+        systems: ["User", "ELV", "REG", "EXP", "OPS"],
+        meetingNotes: "การค้นหาใบอนุญาต:\n• เปิดให้ทั้งประชาชนและเจ้าหน้าที่สามารถสืบค้น/ตรวจสอบสถานะใบอนุญาตได้จริง",
+        steps: [
+          {
+            from: "User",
+            to: "ELV",
+            label: "1. ค้นหาใบอนุญาตดูดทราย",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ค้นจาก ฐาน ELV กับ DOL"
+          },
+          {
+            from: "ELV",
+            to: "EXP",
+            label: "2. ส่งข้อมูลตรวจสอบใบอนุญาต",
+            api: "EXP : /elss/elv/api/v1/license/sand......",
+            method: "GET",
+            params: "",
+            db: "",
+            notes: "ค้นในฐาน tb_elv_sec9_elicense_new และ ค้นใน DOL2"
+          },
+          {
+            from: "User",
+            to: "ELV",
+            label: "3. ค้นหาใบอนุญาตจัดตั้งสำนักงานช่างรังวัดเอกชน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ค้นจาก OPS"
+          },
+          {
+            from: "ELV",
+            to: "OPS",
+            label: "4. ค้นหาใบอนุญาตจัดตั้งสำนักงานช่างรังวัดเอกชน",
+            api: "OPS : /xxxx/xxxx/xxxx/......",
+            params: "",
+            db: "",
+            notes: "ค้นจาก OPS"
+          },
+          {
+            from: "User",
+            to: "ELV",
+            label: "5. ค้นหาใบอนุญาตจัดสรรที่ดิน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "ค้นจาก OPS"
+          },
+          {
+            from: "ELV",
+            to: "REG",
+            label: "6. ค้นหาใบอนุญาตจัดสรรที่ดิน",
+            api: "REG : /xxxx/xxxx/xxxx/......",
+            params: "",
+            db: "",
+            notes: "ค้นจาก DOL"
           }
+        ]
+      },
+      {
+        id: "rpt-dashboard-req",
+        title: "3. RPT Dashboard",
+        description: "ระบบรายงานสถิติและ Dashboard ภาพรวมการดำเนินงานระบบ e-License และการออกใบอนุญาต",
+        systems: ["เจ้าหน้าที่", "ELS", "RPT", "REG"],
+        meetingNotes: "ระบบ Dashboard:\n• ประมวลผลแบบ Real-time และสรุปผลรายวัน\n• แสดงผลกราฟสถิติภาพรวมสำหรับผู้บริหารและเจ้าหน้าที่",
+        steps: [
+          
         ]
       }
     ]

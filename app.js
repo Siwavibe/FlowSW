@@ -65,6 +65,10 @@ document.addEventListener("DOMContentLoaded", () => {
       Officer: {
         dark: { bg: "rgba(244, 63, 94, 0.15)", text: "#fb7185", border: "#f43f5e" },
         light: { bg: "#ffe4e6", text: "#be123c", border: "#fda4af" }
+      },
+      RPT: {
+        dark: { bg: "rgba(217, 70, 239, 0.15)", text: "#f5d0fe", border: "#d946ef" },
+        light: { bg: "#fae8ff", text: "#a21caf", border: "#f5d0fe" }
       }
     };
     
@@ -90,9 +94,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const landCount = WORKFLOWS_DATA.land.requests.filter(r => r.title.includes("คำขอ") || r.title.includes("คำรับ")).length;
       document.getElementById("count-land").textContent = `${landCount} คำขอ`;
     }
-    if (document.getElementById("count-schedule")) {
-      const scheduleCount = WORKFLOWS_DATA.schedule ? WORKFLOWS_DATA.schedule.requests.length : 0;
-      document.getElementById("count-schedule").textContent = `${scheduleCount} รายการ`;
+    if (document.getElementById("count-others")) {
+      const othersCount = WORKFLOWS_DATA.others ? WORKFLOWS_DATA.others.requests.length : 0;
+      document.getElementById("count-others").textContent = `${othersCount} รายการ`;
     }
 
     renderRequestList();
@@ -111,9 +115,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function setupEventListeners() {
     tabSand.addEventListener("click", () => switchProject("sand"));
     tabLand.addEventListener("click", () => switchProject("land"));
-    const tabSchedule = document.getElementById("tab-schedule");
-    if (tabSchedule) {
-      tabSchedule.addEventListener("click", () => switchProject("schedule"));
+    const tabOthers = document.getElementById("tab-others");
+    if (tabOthers) {
+      tabOthers.addEventListener("click", () => switchProject("others"));
     }
 
     // Search input
@@ -299,6 +303,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Detect API Method ---
   function getApiMethod(step) {
+    if (step.method) {
+      return step.method.toUpperCase();
+    }
     if (!step.api) {
       if (step.db) return "DB";
       return "POST";
@@ -313,7 +320,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     const apiLower = step.api.toLowerCase();
-    if (apiLower.startsWith("get ") || apiLower.startsWith("get/")) {
+    if (apiLower.startsWith("get ") || apiLower.startsWith("get/") || apiLower.startsWith("get:") || apiLower.startsWith("get :")) {
       return "GET";
     }
     
@@ -347,7 +354,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const elicenseGroup = ["User", "Citizen", "Developer", "Portal", "minio", "ELS", "PAY", "ELV", "Payment", "schedule"];
+    const elicenseGroup = ["User", "Citizen", "Developer", "Portal", "minio", "ELS", "PAY", "ELV", "Payment", "schedule", "RPT"];
     const dol2Group = ["เจ้าหน้าที่", "Officer", "REG", "EXP", "FIN", "EVD"];
 
     // Ensure double-sided rendering: always have at least one system from each side
