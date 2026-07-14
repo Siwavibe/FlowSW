@@ -1505,7 +1505,7 @@ const WORKFLOWS_DATA = {
           },
           {
             from: "ELS",
-            to: "minio",
+            to: "ELV",
             label: "32. insert ELV ให้",
             api: "",
             params: "",
@@ -1803,7 +1803,7 @@ const WORKFLOWS_DATA = {
           },
           {
             from: "ELS",
-            to: "minio",
+            to: "ELV",
             label: "32. insert ELV ให้",
             api: "",
             params: "",
@@ -2101,7 +2101,7 @@ const WORKFLOWS_DATA = {
           },
           {
             from: "ELS",
-            to: "minio",
+            to: "ELV",
             label: "32. insert ELV ให้",
             api: "",
             params: "",
@@ -2399,7 +2399,7 @@ const WORKFLOWS_DATA = {
           },
           {
             from: "ELS",
-            to: "minio",
+            to: "ELV",
             label: "32. insert ELV ให้",
             api: "",
             params: "",
@@ -2697,7 +2697,7 @@ const WORKFLOWS_DATA = {
           },
           {
             from: "ELS",
-            to: "minio",
+            to: "ELV",
             label: "32. insert ELV ให้",
             api: "",
             params: "",
@@ -2995,7 +2995,7 @@ const WORKFLOWS_DATA = {
           },
           {
             from: "ELS",
-            to: "minio",
+            to: "ELV",
             label: "32. insert ELV ให้",
             api: "",
             params: "",
@@ -3293,7 +3293,7 @@ const WORKFLOWS_DATA = {
           },
           {
             from: "ELS",
-            to: "minio",
+            to: "ELV",
             label: "32. insert ELV ให้",
             api: "",
             params: "",
