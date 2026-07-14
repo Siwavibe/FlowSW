@@ -475,6 +475,30 @@ body::after {
   transition: all var(--transition-speed);
 }
 
+.diagram-header-sticky {
+  position: sticky;
+  top: -28px; /* Sticks to the top border of diagram-wrapper, offsetting padding */
+  z-index: 5;
+  background-color: var(--bg-secondary);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  margin-top: -24px;
+  margin-left: -24px;
+  margin-right: -24px;
+  padding-top: 24px;
+  padding-bottom: 0px;
+  padding-left: 24px;
+  padding-right: 24px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  border-bottom: 1.5px solid var(--border-color);
+}
+
+.diagram-body-scroll {
+  display: block;
+  margin-top: 0px;
+}
+
 /* Interactive SVG Styles */
 svg.sequence-diagram {
   display: block;

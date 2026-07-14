@@ -80,6 +80,17 @@ document.addEventListener("DOMContentLoaded", () => {
   function init() {
     setupEventListeners();
     setupTheme();
+    
+    // Update request count badges on tabs dynamically (counting only actual request flows)
+    if (document.getElementById("count-sand")) {
+      const sandCount = WORKFLOWS_DATA.sand.requests.filter(r => r.title.includes("คำขอ") || r.title.includes("คำรับ")).length;
+      document.getElementById("count-sand").textContent = `${sandCount} คำขอ`;
+    }
+    if (document.getElementById("count-land")) {
+      const landCount = WORKFLOWS_DATA.land.requests.filter(r => r.title.includes("คำขอ") || r.title.includes("คำรับ")).length;
+      document.getElementById("count-land").textContent = `${landCount} คำขอ`;
+    }
+
     renderRequestList();
     loadRequest(0);
 
@@ -329,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const elicenseGroup = ["User", "Citizen", "Developer", "Portal", "minio", "ELS", "PAY", "ELV", "Payment", "schedule"];
-    const dol2Group = ["เจ้าหน้าที่", "Officer", "REG", "EXP", "FIN"];
+    const dol2Group = ["เจ้าหน้าที่", "Officer", "REG", "EXP", "FIN", "EVD"];
 
     // Ensure double-sided rendering: always have at least one system from each side
     let systems = [...rawSystems];
@@ -352,8 +363,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const svgWidth = (systems.length - 1) * gapX + paddingX * 2;
     const svgHeight = headerHeight + steps.length * gapY + footerHeight;
 
-    let svgHtml = `
-      <svg class="sequence-diagram" width="${svgWidth}" height="${svgHeight}" viewBox="0 0 ${svgWidth} ${svgHeight}" xmlns="http://www.w3.org/2000/svg">
+    let svgHeaderHtml = `
+      <svg class="sequence-diagram sequence-diagram-header" width="${svgWidth}" height="${headerHeight}" viewBox="0 0 ${svgWidth} ${headerHeight}" xmlns="http://www.w3.org/2000/svg">
+    `;
+
+    let svgBodyHtml = `
+      <svg class="sequence-diagram sequence-diagram-body" width="${svgWidth}" height="${svgHeight - headerHeight}" viewBox="0 ${headerHeight} ${svgWidth} ${svgHeight - headerHeight}" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <marker id="arrow-POST" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
             <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--color-post)" />
@@ -394,8 +409,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const maxX = Math.max(...elicenseCoords);
       const boxX = minX - 52;
       const boxW = (maxX - minX) + 104;
-      svgHtml += `
-        <rect class="group-background-lane elicense-lane" x="${boxX}" y="8" width="${boxW}" height="${svgHeight - 16}" rx="8" 
+      
+      svgHeaderHtml += `
+        <rect class="group-background-lane elicense-lane" x="${boxX}" y="8" width="${boxW}" height="${headerHeight - 8}" rx="8" 
+              fill="${currentTheme === 'dark' ? 'rgba(34, 211, 238, 0.05)' : 'rgba(8, 145, 178, 0.07)'}" 
+              stroke="${currentTheme === 'dark' ? 'rgba(34, 211, 238, 0.25)' : 'rgba(8, 145, 178, 0.3)'}" 
+              stroke-width="1.8" stroke-dasharray="6 4" />
+      `;
+      svgBodyHtml += `
+        <rect class="group-background-lane elicense-lane" x="${boxX}" y="${headerHeight}" width="${boxW}" height="${svgHeight - headerHeight - 8}" rx="8" 
               fill="${currentTheme === 'dark' ? 'rgba(34, 211, 238, 0.05)' : 'rgba(8, 145, 178, 0.07)'}" 
               stroke="${currentTheme === 'dark' ? 'rgba(34, 211, 238, 0.25)' : 'rgba(8, 145, 178, 0.3)'}" 
               stroke-width="1.8" stroke-dasharray="6 4" />
@@ -407,8 +429,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const maxX = Math.max(...dol2Coords);
       const boxX = minX - 52;
       const boxW = (maxX - minX) + 104;
-      svgHtml += `
-        <rect class="group-background-lane dol2-lane" x="${boxX}" y="8" width="${boxW}" height="${svgHeight - 16}" rx="8" 
+      
+      svgHeaderHtml += `
+        <rect class="group-background-lane dol2-lane" x="${boxX}" y="8" width="${boxW}" height="${headerHeight - 8}" rx="8" 
+              fill="${currentTheme === 'dark' ? 'rgba(168, 85, 247, 0.05)' : 'rgba(109, 40, 217, 0.07)'}" 
+              stroke="${currentTheme === 'dark' ? 'rgba(168, 85, 247, 0.25)' : 'rgba(109, 40, 217, 0.3)'}" 
+              stroke-width="1.8" stroke-dasharray="6 4" />
+      `;
+      svgBodyHtml += `
+        <rect class="group-background-lane dol2-lane" x="${boxX}" y="${headerHeight}" width="${boxW}" height="${svgHeight - headerHeight - 8}" rx="8" 
               fill="${currentTheme === 'dark' ? 'rgba(168, 85, 247, 0.05)' : 'rgba(109, 40, 217, 0.07)'}" 
               stroke="${currentTheme === 'dark' ? 'rgba(168, 85, 247, 0.25)' : 'rgba(109, 40, 217, 0.3)'}" 
               stroke-width="1.8" stroke-dasharray="6 4" />
@@ -421,7 +450,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const maxX = Math.max(...elicenseCoords);
       const boxX = minX - 52;
       const boxW = (maxX - minX) + 104;
-      svgHtml += `
+      svgHeaderHtml += `
         <g class="group-header-block elicense">
           <rect x="${boxX}" y="10" width="${boxW}" height="30" rx="6" 
                 fill="${currentTheme === 'dark' ? 'rgba(34, 211, 238, 0.08)' : 'rgba(8, 145, 178, 0.08)'}" 
@@ -438,7 +467,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const maxX = Math.max(...dol2Coords);
       const boxX = minX - 52;
       const boxW = (maxX - minX) + 104;
-      svgHtml += `
+      svgHeaderHtml += `
         <g class="group-header-block dol2">
           <rect x="${boxX}" y="10" width="${boxW}" height="30" rx="6" 
                 fill="${currentTheme === 'dark' ? 'rgba(168, 85, 247, 0.08)' : 'rgba(109, 40, 217, 0.08)'}" 
@@ -453,15 +482,19 @@ document.addEventListener("DOMContentLoaded", () => {
     systems.forEach((sys, idx) => {
       const x = systemCoords[sys];
 
-      svgHtml += `
+      svgBodyHtml += `
         <line class="lifeline-line" x1="${x}" y1="${headerHeight}" x2="${x}" y2="${svgHeight - footerHeight}" />
+      `;
+
+      svgHeaderHtml += `
+        <line class="lifeline-line" x1="${x}" y1="84" x2="${x}" y2="${headerHeight}" />
       `;
 
       // Colorize system nodes dynamically based on project name mappings (mimicking user image style)
       const sysStyle = getSystemStyle(sys, currentTheme);
 
       // Header Node (Top) - shifted down to y=50
-      svgHtml += `
+      svgHeaderHtml += `
         <g class="lifeline-node">
           <rect class="lifeline-rect" x="${x - 55}" y="50" width="110" height="34" fill="${sysStyle.bg}" stroke="${sysStyle.border}" />
           <text class="lifeline-text" x="${x}" y="71" fill="${sysStyle.text}">${sys}</text>
@@ -469,7 +502,7 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
 
       // Footer Node (Bottom)
-      svgHtml += `
+      svgBodyHtml += `
         <g class="lifeline-node">
           <rect class="lifeline-rect" x="${x - 55}" y="${svgHeight - 38}" width="110" height="28" fill="${sysStyle.bg}" stroke="${sysStyle.border}" />
           <text class="lifeline-text" x="${x}" y="${svgHeight - 20}" fill="${sysStyle.text}">${sys}</text>
@@ -483,10 +516,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const xTo = systemCoords[step.to];
 
       if (xFrom) {
-        svgHtml += `<rect class="activation-box" x="${xFrom - 5}" y="${y - 10}" width="10" height="30" />`;
+        svgBodyHtml += `<rect class="activation-box" x="${xFrom - 5}" y="${y - 10}" width="10" height="30" />`;
       }
       if (xTo && xFrom !== xTo) {
-        svgHtml += `<rect class="activation-box" x="${xTo - 5}" y="${y - 5}" width="10" height="30" />`;
+        svgBodyHtml += `<rect class="activation-box" x="${xTo - 5}" y="${y - 5}" width="10" height="30" />`;
       }
     });
 
@@ -506,7 +539,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const arrowStart = directionRight ? xFrom + 5 : xFrom - 5;
         const arrowEnd = directionRight ? xTo - 8 : xTo + 8;
 
-        svgHtml += `
+        svgBodyHtml += `
           <g class="arrow-group" data-step-index="${stepIdx}" style="cursor: pointer;">
             <line x1="${arrowStart}" y1="${y}" x2="${arrowEnd}" y2="${y}" stroke="transparent" stroke-width="12" />
             <line class="message-arrow method-${method} ${activeClass}" 
@@ -527,7 +560,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const startX = xFrom + 5;
         const activeClass = isActive ? "active" : "";
 
-        svgHtml += `
+        svgBodyHtml += `
           <g class="arrow-group self-loop" data-step-index="${stepIdx}" style="cursor: pointer;">
             <path d="M ${startX} ${y - 12} 
                      C ${startX + loopRadiusX * 1.5} ${y - 12}, 
@@ -553,8 +586,17 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    svgHtml += `</svg>`;
-    diagramContainer.innerHTML = svgHtml;
+    svgHeaderHtml += `</svg>`;
+    svgBodyHtml += `</svg>`;
+    
+    diagramContainer.innerHTML = `
+      <div class="diagram-header-sticky">
+        ${svgHeaderHtml}
+      </div>
+      <div class="diagram-body-scroll">
+        ${svgBodyHtml}
+      </div>
+    `;
 
     const arrowGroups = diagramContainer.querySelectorAll(".arrow-group");
     arrowGroups.forEach((group) => {
