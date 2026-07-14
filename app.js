@@ -90,6 +90,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const landCount = WORKFLOWS_DATA.land.requests.filter(r => r.title.includes("คำขอ") || r.title.includes("คำรับ")).length;
       document.getElementById("count-land").textContent = `${landCount} คำขอ`;
     }
+    if (document.getElementById("count-schedule")) {
+      const scheduleCount = WORKFLOWS_DATA.schedule ? WORKFLOWS_DATA.schedule.requests.length : 0;
+      document.getElementById("count-schedule").textContent = `${scheduleCount} รายการ`;
+    }
 
     renderRequestList();
     loadRequest(0);
@@ -105,9 +109,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Event Listeners ---
   function setupEventListeners() {
-    // Project switcher
     tabSand.addEventListener("click", () => switchProject("sand"));
     tabLand.addEventListener("click", () => switchProject("land"));
+    const tabSchedule = document.getElementById("tab-schedule");
+    if (tabSchedule) {
+      tabSchedule.addEventListener("click", () => switchProject("schedule"));
+    }
 
     // Search input
     searchInput.addEventListener("input", (e) => {
@@ -183,13 +190,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentProject === project) return;
     currentProject = project;
 
-    if (project === "sand") {
-      tabSand.classList.add("active");
-      tabLand.classList.remove("active");
-    } else {
-      tabLand.classList.add("active");
-      tabSand.classList.remove("active");
-    }
+    const tabs = document.querySelectorAll(".project-tabs .tab-btn");
+    tabs.forEach((tab) => {
+      if (tab.getAttribute("data-project") === project) {
+        tab.classList.add("active");
+      } else {
+        tab.classList.remove("active");
+      }
+    });
 
     currentRequestIndex = 0;
     currentStepIndex = null;

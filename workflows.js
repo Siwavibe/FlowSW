@@ -893,42 +893,6 @@ const WORKFLOWS_DATA = {
             notes: "ตรวจสอบสถานะคำขอ"
           }
         ]
-      },
-      {
-        id: "sand-req-6",
-        title: "6. งาน Schedule (งานตั้งเวลา)",
-        description: "งานประมวลผลเบื้องหลังตามเวลาที่กำหนด (Background Schedule Jobs) ที่ไม่ได้ผูกกับขั้นตอนของคำขอโดยตรง",
-        systems: ["schedule", "ELS", "ELV","minio","REG","กรมบัญชีกลาง"],
-        meetingNotes: "งานระบบเบื้องหลัง (Cron Job/Scheduler):\n• ทำงานอัตโนมัติตามช่วงเวลาที่กำหนด",
-        steps: [
-          {
-            from: "schedule",
-            to: "กรมบัญชีกลาง",
-            label: "1. ตรวจสอบการชำระเงิน",
-            api: "PMT2|CheckPaymentStatus",
-            params: "",
-            db: "",
-            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที ตั้งแต่ 6.00-23.00 น."
-          },
-          {
-            from: "schedule",
-            to: "REG",
-            label: "2. ตรวจสอบสถานะ อนุมัติ/จดทะเบียน",
-            api: "REG : /eLicense-service/elss/elss/api/v1/public/sec9/getProcessStatus/xxxxxxx",
-            params: "",
-            db: "",
-            notes: "getProcessStatus ใช้เลข processSeq ทุก 15 นาที ตั้งแต่ 6.00 - 22.55 น."
-          },
-          {
-            from: "schedule",
-            to: "ELV",
-            label: "3. สิ้นสุดใบอนุญาตดูดทราย ",
-            api: "",
-            params: "",
-            db: "",
-            notes: "update tb_elv_sec9_license_new.status_flag=F สิ้นสุดระยะเวลาของใบอนุญาต ทุก 23.58 น."
-          }
-        ]
       }
     ]
   },
@@ -1321,6 +1285,48 @@ const WORKFLOWS_DATA = {
         meetingNotes: "Meeting 04/07/69 - 13.30 น.\n• ห้ามปรับลดพื้นที่สาธารณูปโภคโดยรวม เว้นแต่จะได้รับการอนุมัติเป็นกรณีพิเศษจากคณะกรรมการ\n• ต้องไม่กระทบสิทธิ์ของเจ้าของที่ดินแปลงย่อยที่จองหรือโอนไปแล้ว",
         steps: [
 
+        ]
+      }
+    ]
+  },
+  schedule: {
+    title: "งานตั้งเวลา (Schedule)",
+    description: "ระบบประมวลผลอัตโนมัติเบื้องหลัง",
+    requests: [
+      {
+        id: "schedule-req-1",
+        title: "1. งาน Schedule (งานตั้งเวลา)",
+        description: "งานประมวลผลเบื้องหลังตามเวลาที่กำหนด (Background Schedule Jobs) ที่ไม่ได้ผูกกับขั้นตอนของคำขอโดยตรง",
+        systems: ["schedule", "ELS", "ELV","minio","REG","กรมบัญชีกลาง"],
+        meetingNotes: "งานระบบเบื้องหลัง (Cron Job/Scheduler):\n• ทำงานอัตโนมัติตามช่วงเวลาที่กำหนด",
+        steps: [
+          {
+            from: "schedule",
+            to: "กรมบัญชีกลาง",
+            label: "1. ตรวจสอบการชำระเงิน",
+            api: "PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที ตั้งแต่ 6.00-23.00 น."
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "2. ตรวจสอบสถานะ อนุมัติ/จดทะเบียน",
+            api: "REG : /eLicense-service/elss/elss/api/v1/public/sec9/getProcessStatus/xxxxxxx",
+            params: "",
+            db: "",
+            notes: "getProcessStatus ใช้เลข processSeq ทุก 15 นาที ตั้งแต่ 6.00 - 22.55 น."
+          },
+          {
+            from: "schedule",
+            to: "ELV",
+            label: "3. สิ้นสุดใบอนุญาตดูดทราย ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "update tb_elv_sec9_license_new.status_flag=F สิ้นสุดระยะเวลาของใบอนุญาต ทุก 23.58 น."
+          }
         ]
       }
     ]
