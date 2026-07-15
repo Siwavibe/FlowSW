@@ -1098,81 +1098,9 @@ const WORKFLOWS_DATA = {
             notes: ""
           },
           {
-            from: "User",
-            to: "ELS",
-            label: "22. เมนู ติดตาม กดดำเนินการเพื่อสร้าง คิววันที่ 2",
-            api: "",
-            params: "",
-            db: "",
-            notes: ""
-          },
-          {
-            from: "User",
-            to: "ELS",
-            label: "23. พิมพ์ใบแจ้งชำระเงิน ",
-            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
-            params: "",
-            db: "",
-            notes: "สร้างใบแจ้งชำระเงิน ค่าใบอนุญาต"
-          },
-          {
-            from: "User",
-            to: "schedule",
-            label: "24. ไป ชำระเงิน ภายใน 23.00",
-            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
-            params: "",
-            db: "",
-            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
-          },
-          {
-            from: "schedule",
-            to: "REG",
-            label: "25. สถานะ ชำระเงิน",
-            api: "REG : /elss/api/v1/public/order/saveOrder",
-            params: "",
-            db: "",
-            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
-          },
-          {
-            from: "เจ้าหน้าที่",
-            to: "REG",
-            label: "26. รับเรื่องและเรียกคิว",
-            api: "",
-            params: "",
-            db: "",
-            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
-          },
-          {
-            from: "เจ้าหน้าที่",
-            to: "FIN",
-            label: "27. ชำระเงิน ใบสั่ง E000X",
-            api: "",
-            params: "",
-            db: "",
-            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
-          },
-          {
-            from: "เจ้าหน้าที่",
-            to: "REG",
-            label: "28. จดทะเบียน",
-            api: "",
-            params: "",
-            db: "",
-            notes: "จดทะเบียน"
-          },
-          {
-            from: "schedule",
-            to: "REG",
-            label: "29. เช็คสถานะ ",
-            api: "REG : /elss/api/v1/public/sec9/getProcessStatus/",
-            params: "",
-            db: "",
-            notes: "ตรวจสอบสถานะคำขอ"
-          },
-          {
             from: "เจ้าหน้าที่",
             to: "EVD",
-            label: "30. แสกนใบอนุญาต",
+            label: "22. แสกนใบอนุญาต",
             api: "",
             params: "",
             db: "",
@@ -1181,7 +1109,7 @@ const WORKFLOWS_DATA = {
           {
             from: "EVD",
             to: "ELS",
-            label: "31. ส่งภาพแสกน",
+            label: "23. ส่งภาพแสกน",
             api: "",
             params: "",
             db: "",
@@ -1190,7 +1118,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "minio",
-            label: "32. PDFแสกน และ Gen PDF ใส่ Timestamp + CA",
+            label: "24. PDFแสกน และ Gen PDF ใส่ Timestamp + CA",
             api: "",
             params: "",
             db: "",
@@ -1199,7 +1127,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "ELV",
-            label: "33. insert ELV ให้",
+            label: "25. insert ELV ให้",
             api: "",
             params: "",
             db: "",
@@ -1208,7 +1136,97 @@ const WORKFLOWS_DATA = {
           {
             from: "User",
             to: "ELS",
-            label: "34. ดาวน์โหลดใบอนุญาต",
+            label: "26. เมนู ติดตาม กดดำเนินการเพื่อสร้าง คิววันที่ 2",
+            api: "",
+            params: "",
+            db: "",
+            notes: ""
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "27. ปุ่ม ถัดไป เพื่อส่งข้อมูลคำขอ ",
+            api: "",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน ค่าใบอนุญาต"
+          },
+          {
+            from: "ELS",
+            to: "REG",
+            label: "28. เพื่อส่งข้อมูลคำขอวันที่ 2",
+            api: "REG : /elss/api/v1/public/project/processData",
+            params: "",
+            db: "",
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=267 ส่ง ProcessOldSeq ด้วย"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "29. พิมพ์ใบแจ้งชำระเงิน ",
+            api: "กรมบัญชีกลาง : PMT1|BillpaymentManage",
+            params: "",
+            db: "",
+            notes: "สร้างใบแจ้งชำระเงิน ค่าใบอนุญาต"
+          },
+          {
+            from: "User",
+            to: "schedule",
+            label: "30. ไป ชำระเงิน ภายใน 23.00",
+            api: "กรมบัญชีกลาง : PMT2|CheckPaymentStatus",
+            params: "",
+            db: "",
+            notes: "กวาด check สถานะชำระเงิน ทุก 15 นาที"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "31. สถานะ ชำระเงิน",
+            api: "REG : /elss/api/v1/public/order/saveOrder",
+            params: "",
+            db: "",
+            notes: "ส่งค่าใช้จ่ายไปยัง DOL2"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "32. รับเรื่องและเรียกคิว",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูประชาสัมพันธ์รับเรื่องและต้องเรียกคิว ใบสั่งจะส่งไปให้การเงิน"
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "FIN",
+            label: "33. ชำระเงิน ใบสั่ง E000X",
+            api: "",
+            params: "",
+            db: "",
+            notes: "เมนูพิมพ์ใบเสร็จชำระเงิน "
+          },
+          {
+            from: "เจ้าหน้าที่",
+            to: "REG",
+            label: "34. จดทะเบียน",
+            api: "",
+            params: "",
+            db: "",
+            notes: "จดทะเบียน"
+          },
+          {
+            from: "schedule",
+            to: "REG",
+            label: "35. เช็คสถานะ ",
+            api: "REG : /elss/api/v1/public/sec9/getProcessStatus/",
+            params: "",
+            db: "",
+            notes: "ตรวจสอบสถานะคำขอ"
+          },
+          {
+            from: "User",
+            to: "ELS",
+            label: "36. ดาวน์โหลดใบอนุญาต",
             api: "",
             params: "",
             db: "",
