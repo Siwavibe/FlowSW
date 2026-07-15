@@ -528,18 +528,65 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
     });
 
-    steps.forEach((step, stepIdx) => {
-      const y = headerHeight + stepIdx * gapY + gapY / 2;
-      const xFrom = systemCoords[step.from] || (step.from ? systemCoords[step.from.toLowerCase()] : undefined);
-      const xTo = systemCoords[step.to] || (step.to ? systemCoords[step.to.toLowerCase()] : undefined);
+    // Draw activation boxes
+    if (request.activationBars && request.activationBars.length > 0) {
+      const customCovered = {}; // format: "systemName-stepIdx" -> true
 
-      if (xFrom) {
-        svgBodyHtml += `<rect class="activation-box" x="${xFrom - 5}" y="${y - 10}" width="10" height="30" />`;
-      }
-      if (xTo && xFrom !== xTo) {
-        svgBodyHtml += `<rect class="activation-box" x="${xTo - 5}" y="${y - 5}" width="10" height="30" />`;
-      }
-    });
+      request.activationBars.forEach((bar) => {
+        const xSys = systemCoords[bar.system] || (bar.system ? systemCoords[bar.system.toLowerCase()] : undefined);
+        if (!xSys) return;
+
+        const yStart = headerHeight + bar.startStepIdx * gapY + gapY / 2;
+        const yEnd = headerHeight + bar.endStepIdx * gapY + gapY / 2;
+
+        const startStep = steps[bar.startStepIdx];
+        const endStep = steps[bar.endStepIdx];
+        if (!startStep || !endStep) return;
+
+        const xFromStart = systemCoords[startStep.from] || (startStep.from ? systemCoords[startStep.from.toLowerCase()] : undefined);
+        const xFromEnd = systemCoords[endStep.from] || (endStep.from ? systemCoords[endStep.from.toLowerCase()] : undefined);
+
+        const startY = (xFromStart === xSys) ? (yStart - 10) : (yStart - 5);
+        const endY = (xFromEnd === xSys) ? (yEnd + 20) : (yEnd + 25);
+        
+        const height = endY - startY;
+        svgBodyHtml += `<rect class="activation-box" x="${xSys - 5}" y="${startY}" width="10" height="${height}" />`;
+
+        for (let i = bar.startStepIdx; i <= bar.endStepIdx; i++) {
+          customCovered[`${bar.system.toLowerCase()}-${i}`] = true;
+        }
+      });
+
+      steps.forEach((step, stepIdx) => {
+        const y = headerHeight + stepIdx * gapY + gapY / 2;
+        const xFrom = systemCoords[step.from] || (step.from ? systemCoords[step.from.toLowerCase()] : undefined);
+        const xTo = systemCoords[step.to] || (step.to ? systemCoords[step.to.toLowerCase()] : undefined);
+
+        if (step.from && !customCovered[`${step.from.toLowerCase()}-${stepIdx}`]) {
+          if (xFrom) {
+            svgBodyHtml += `<rect class="activation-box" x="${xFrom - 5}" y="${y - 10}" width="10" height="30" />`;
+          }
+        }
+        if (step.to && step.from !== step.to && !customCovered[`${step.to.toLowerCase()}-${stepIdx}`]) {
+          if (xTo) {
+            svgBodyHtml += `<rect class="activation-box" x="${xTo - 5}" y="${y - 5}" width="10" height="30" />`;
+          }
+        }
+      });
+    } else {
+      steps.forEach((step, stepIdx) => {
+        const y = headerHeight + stepIdx * gapY + gapY / 2;
+        const xFrom = systemCoords[step.from] || (step.from ? systemCoords[step.from.toLowerCase()] : undefined);
+        const xTo = systemCoords[step.to] || (step.to ? systemCoords[step.to.toLowerCase()] : undefined);
+
+        if (xFrom) {
+          svgBodyHtml += `<rect class="activation-box" x="${xFrom - 5}" y="${y - 10}" width="10" height="30" />`;
+        }
+        if (xTo && xFrom !== xTo) {
+          svgBodyHtml += `<rect class="activation-box" x="${xTo - 5}" y="${y - 5}" width="10" height="30" />`;
+        }
+      });
+    }
 
     steps.forEach((step, stepIdx) => {
       const y = headerHeight + stepIdx * gapY + gapY / 2;
@@ -552,20 +599,31 @@ document.addEventListener("DOMContentLoaded", () => {
       
       if (!xFrom || !xTo) return;
 
+      const stepNumStr = step.stepNum !== undefined ? step.stepNum : (stepIdx + 1);
+      const showBubble = !step.hideBubble;
+      const dashAttr = step.isReturn ? `stroke-dasharray="6 4"` : "";
+
       if (xFrom !== xTo) {
         const directionRight = xTo > xFrom;
         const arrowStart = directionRight ? xFrom + 5 : xFrom - 5;
         const arrowEnd = directionRight ? xTo - 8 : xTo + 8;
+
+        let bubbleHtml = "";
+        if (showBubble && stepNumStr !== "") {
+          bubbleHtml = `
+            <circle class="step-number-bubble ${activeClass}" cx="${(xFrom + xTo) / 2}" cy="${y - 20}" r="14" />
+            <text class="step-number-text ${activeClass}" x="${(xFrom + xTo) / 2}" y="${y - 20}">${stepNumStr}</text>
+          `;
+        }
 
         svgBodyHtml += `
           <g class="arrow-group" data-step-index="${stepIdx}" style="cursor: pointer;">
             <line x1="${arrowStart}" y1="${y}" x2="${arrowEnd}" y2="${y}" stroke="transparent" stroke-width="12" />
             <line class="message-arrow method-${method} ${activeClass}" 
                   x1="${arrowStart}" y1="${y}" x2="${arrowEnd}" y2="${y}" 
-                  marker-end="url(#arrow-${method})" />
+                  marker-end="url(#arrow-${method})" ${dashAttr} />
             
-            <circle class="step-number-bubble ${activeClass}" cx="${(xFrom + xTo) / 2}" cy="${y - 20}" r="10" />
-            <text class="step-number-text ${activeClass}" x="${(xFrom + xTo) / 2}" y="${y - 20}">${stepIdx + 1}</text>
+            ${bubbleHtml}
 
             <text class="message-text ${activeClass}" x="${(xFrom + xTo) / 2}" y="${y - 6}" text-anchor="middle">
               ${truncateString(cleanLabel(step.label), 26)}
@@ -576,7 +634,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const loopRadiusX = 40;
         const loopHeight = 25;
         const startX = xFrom + 5;
-        const activeClass = isActive ? "active" : "";
+
+        let bubbleHtml = "";
+        if (showBubble && stepNumStr !== "") {
+          bubbleHtml = `
+            <circle class="step-number-bubble ${activeClass}" cx="${xFrom + loopRadiusX + 5}" cy="${y + 5}" r="14" />
+            <text class="step-number-text ${activeClass}" x="${xFrom + loopRadiusX + 5}" y="${y + 5}">${stepNumStr}</text>
+          `;
+        }
 
         svgBodyHtml += `
           <g class="arrow-group self-loop" data-step-index="${stepIdx}" style="cursor: pointer;">
@@ -591,10 +656,9 @@ document.addEventListener("DOMContentLoaded", () => {
                      C ${startX + loopRadiusX} ${y - 12}, 
                        ${startX + loopRadiusX} ${y + loopHeight}, 
                        ${startX + 6} ${y + loopHeight}" 
-                  fill="none" marker-end="url(#arrow-${method})" />
+                  fill="none" marker-end="url(#arrow-${method})" ${dashAttr} />
 
-            <circle class="step-number-bubble ${activeClass}" cx="${xFrom + loopRadiusX + 5}" cy="${y + 5}" r="10" />
-            <text class="step-number-text ${activeClass}" x="${xFrom + loopRadiusX + 5}" y="${y + 5}">${stepIdx + 1}</text>
+            ${bubbleHtml}
 
             <text class="message-text ${activeClass}" x="${xFrom + 12}" y="${y - 16}" text-anchor="start">
               ${truncateString(cleanLabel(step.label), 24)}
@@ -640,11 +704,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       request.steps.forEach((step, idx) => {
         const method = getApiMethod(step);
+        const stepNumStr = step.stepNum !== undefined ? step.stepNum : (idx + 1);
+        const bubbleContent = step.hideBubble ? "↵" : stepNumStr;
         timelineHtml += `
-          <div class="step-detail-card" style="cursor: pointer; padding: 12px 14px; transition: all 0.2s;" onclick="window.selectStep(${idx})">
+          <div class="step-detail-card timeline-drawer-card" style="cursor: pointer;" onclick="window.selectStep(${idx})">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
               <div style="display: flex; align-items: center; gap: 8px; max-width: 80%;">
-                <span class="step-number-bubble active" style="position: static; display: inline-flex; width: 20px; height: 20px; font-size: 10px; font-weight: 700; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background-color: var(--accent-color); flex-shrink: 0;">${idx + 1}</span>
+                <span class="step-number-badge">${bubbleContent}</span>
                 <span class="step-label" style="font-size: 0.88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600;">${cleanLabel(step.label)}</span>
               </div>
               <span class="step-badge ${method}" style="font-size: 0.65rem; padding: 2px 5px;">${method}</span>
@@ -671,12 +737,16 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       const step = request.steps[currentStepIndex];
       const method = getApiMethod(step);
+      const stepNumStr = step.stepNum !== undefined ? step.stepNum : (currentStepIndex + 1);
+      const stepHeaderLabel = step.hideBubble 
+        ? "ขั้นตอนส่งคืนผลลัพธ์ (Response)" 
+        : `ขั้นตอนที่ ${stepNumStr}`;
 
       let detailHtml = `
         <div class="step-detail-card">
           <div class="step-header">
             <div style="display: flex; flex-direction: column; gap: 4px; max-width: 80%;">
-              <div style="font-size: 0.78rem; color: var(--accent-color); font-weight: 700;">ขั้นตอนที่ ${currentStepIndex + 1} จาก ${request.steps.length}</div>
+              <div style="font-size: 0.78rem; color: var(--accent-color); font-weight: 700;">${stepHeaderLabel} จาก ${request.steps.length} ขั้นตอน</div>
               <div class="step-label">${cleanLabel(step.label)}</div>
             </div>
             <span class="step-badge ${method}">${method}</span>
