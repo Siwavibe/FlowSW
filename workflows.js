@@ -1088,7 +1088,7 @@ const WORKFLOWS_DATA = {
             notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
           },
           {
-            from: "Schedule",
+            from: "schedule",
             to: "REG",
             label: "21. มติคณะกรรมการ",
             api: "REG : /elss/api/v1/public................",
@@ -1395,7 +1395,7 @@ const WORKFLOWS_DATA = {
             notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
           },
           {
-            from: "Schedule",
+            from: "schedule",
             to: "REG",
             label: "20. มติคณะกรรมการ มั้ย??",
             api: "REG : /elss/api/v1/public................",
@@ -1693,7 +1693,7 @@ const WORKFLOWS_DATA = {
             notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
           },
           {
-            from: "Schedule",
+            from: "schedule",
             to: "REG",
             label: "20. มติคณะกรรมการ มั้ย??",
             api: "REG : /elss/api/v1/public................",
@@ -1991,7 +1991,7 @@ const WORKFLOWS_DATA = {
             notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
           },
           {
-            from: "Schedule",
+            from: "schedule",
             to: "REG",
             label: "20. มติคณะกรรมการ มั้ย??",
             api: "REG : /elss/api/v1/public................",
@@ -2289,7 +2289,7 @@ const WORKFLOWS_DATA = {
             notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
           },
           {
-            from: "Schedule",
+            from: "schedule",
             to: "REG",
             label: "20. มติคณะกรรมการ มั้ย??",
             api: "REG : /elss/api/v1/public................",
@@ -2449,7 +2449,7 @@ const WORKFLOWS_DATA = {
             api: "REG : /elss/api/v1/public/project/processData",
             params: "",
             db: "",
-            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=277 ส่ง projectSeq , prjTrfLicesnseData"
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=275 ส่ง projectSeq , prjTrfLicesnseData"
           },
           {
             from: "ELS",
@@ -2587,7 +2587,7 @@ const WORKFLOWS_DATA = {
             notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
           },
           {
-            from: "Schedule",
+            from: "schedule",
             to: "REG",
             label: "20. มติคณะกรรมการ มั้ย??",
             api: "REG : /elss/api/v1/public................",
@@ -2747,7 +2747,7 @@ const WORKFLOWS_DATA = {
             api: "REG : /elss/api/v1/public/project/processData",
             params: "",
             db: "",
-            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=277 ส่ง projectSeq , prjTrfLicesnseData"
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=312 ส่ง projectSeq , processTempRegistName,processTempComment"
           },
           {
             from: "ELS",
@@ -2885,7 +2885,7 @@ const WORKFLOWS_DATA = {
             notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
           },
           {
-            from: "Schedule",
+            from: "schedule",
             to: "REG",
             label: "20. มติคณะกรรมการ มั้ย??",
             api: "REG : /elss/api/v1/public................",
@@ -3045,7 +3045,7 @@ const WORKFLOWS_DATA = {
             api: "REG : /elss/api/v1/public/project/processData",
             params: "",
             db: "",
-            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=277 ส่ง projectSeq , prjTrfLicesnseData"
+            notes: "ส่งข้อมูลคำขอรายละเอียดคำขอไปยัง DOL2 registerSeq=271 ส่ง projectSeq , projectCorpData"
           },
           {
             from: "ELS",
@@ -3183,7 +3183,7 @@ const WORKFLOWS_DATA = {
             notes: "เมนู บัญชีคุมจัดสรร (จ.ส.ก.4)"
           },
           {
-            from: "Schedule",
+            from: "schedule",
             to: "REG",
             label: "20. มติคณะกรรมการ มั้ย??",
             api: "REG : /elss/api/v1/public................",

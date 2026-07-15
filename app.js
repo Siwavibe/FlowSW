@@ -410,6 +410,9 @@ document.addEventListener("DOMContentLoaded", () => {
     systems.forEach((sys, idx) => {
       const x = paddingX + idx * gapX;
       systemCoords[sys] = x;
+      if (sys) {
+        systemCoords[sys.toLowerCase()] = x;
+      }
 
       if (elicenseGroup.includes(sys)) {
         elicenseCoords.push(x);
@@ -527,8 +530,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     steps.forEach((step, stepIdx) => {
       const y = headerHeight + stepIdx * gapY + gapY / 2;
-      const xFrom = systemCoords[step.from];
-      const xTo = systemCoords[step.to];
+      const xFrom = systemCoords[step.from] || (step.from ? systemCoords[step.from.toLowerCase()] : undefined);
+      const xTo = systemCoords[step.to] || (step.to ? systemCoords[step.to.toLowerCase()] : undefined);
 
       if (xFrom) {
         svgBodyHtml += `<rect class="activation-box" x="${xFrom - 5}" y="${y - 10}" width="10" height="30" />`;
@@ -540,8 +543,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     steps.forEach((step, stepIdx) => {
       const y = headerHeight + stepIdx * gapY + gapY / 2;
-      const xFrom = systemCoords[step.from];
-      const xTo = systemCoords[step.to];
+      const xFrom = systemCoords[step.from] || (step.from ? systemCoords[step.from.toLowerCase()] : undefined);
+      const xTo = systemCoords[step.to] || (step.to ? systemCoords[step.to.toLowerCase()] : undefined);
       
       const method = getApiMethod(step);
       const isActive = currentStepIndex === stepIdx;
