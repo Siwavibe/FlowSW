@@ -1145,7 +1145,7 @@ const WORKFLOWS_DATA = {
           {
             from: "User",
             to: "ELS",
-            label: "27. ปุ่ม ถัดไป เพื่อส่งข้อมูลคำขอ ",
+            label: "27. ปุ่ม ส่งคำขอ เพื่อส่งข้อมูลคำขอ ",
             api: "",
             params: "",
             db: "",
@@ -1154,7 +1154,7 @@ const WORKFLOWS_DATA = {
           {
             from: "ELS",
             to: "REG",
-            label: "28. เพื่อส่งข้อมูลคำขอวันที่ 2",
+            label: "28. ส่งข้อมูลคำขอวันที่ 2",
             api: "REG : /elss/api/v1/public/project/processData",
             params: "",
             db: "",
